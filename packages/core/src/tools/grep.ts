@@ -62,23 +62,23 @@ export class GrepTool extends BaseTool<GrepToolParams, ToolResult> {
   constructor(private rootDirectory: string) {
     super(
       GrepTool.Name,
-      'SearchText',
-      'Searches for a regular expression pattern within the content of files in a specified directory (or current working directory). Can filter files by a glob pattern. Returns the lines containing matches, along with their file paths and line numbers.',
+      '搜索文本',
+      '在指定目录（或当前工作目录）的文件内容中搜索正则表达式模式。可以通过 glob 模式过滤文件。返回包含匹配项的行，以及其文件路径和行号。',
       {
         properties: {
           pattern: {
             description:
-              "The regular expression (regex) pattern to search for within file contents (e.g., 'function\\s+myFunction', 'import\\s+\\{.*\\}\\s+from\\s+.*').",
+              "在文件内容中搜索的正则表达式模式（例如，'function\\s+myFunction'，'import\\s+\\{.*\\}\\s+from\\s+.*'）。",
             type: 'string',
           },
           path: {
             description:
-              'Optional: The absolute path to the directory to search within. If omitted, searches the current working directory.',
+              '可选：要在其中搜索的目录的绝对路径。如果省略，则搜索当前工作目录。',
             type: 'string',
           },
           include: {
             description:
-              "Optional: A glob pattern to filter which files are searched (e.g., '*.js', '*.{ts,tsx}', 'src/**'). If omitted, searches all files (respecting potential global ignores).",
+              "可选：用于过滤搜索哪些文件的 glob 模式（例如，'*.js'，'*.{ts,tsx}'，'src/**'）。如果省略，则搜索所有文件（尊重潜在的全局忽略项）。",
             type: 'string',
           },
         },
@@ -142,13 +142,13 @@ export class GrepTool extends BaseTool<GrepToolParams, ToolResult> {
         params,
       )
     ) {
-      return 'Parameters failed schema validation.';
+      return '参数未通过结构验证。';
     }
 
     try {
       new RegExp(params.pattern);
     } catch (error) {
-      return `Invalid regular expression pattern provided: ${params.pattern}. Error: ${getErrorMessage(error)}`;
+      return `提供的正则表达式模式无效：${params.pattern}。错误：${getErrorMessage(error)}`;
     }
 
     try {
@@ -192,7 +192,7 @@ export class GrepTool extends BaseTool<GrepToolParams, ToolResult> {
       });
 
       if (matches.length === 0) {
-        const noMatchMsg = `No matches found for pattern "${params.pattern}" in path "${searchDirDisplay}"${params.include ? ` (filter: "${params.include}")` : ''}.`;
+        const noMatchMsg = `在路径"${searchDirDisplay}"${params.include ? `（过滤器："${params.include}"）` : ''}中未找到模式"${params.pattern}"的匹配项。`;
         return { llmContent: noMatchMsg, returnDisplay: `未找到匹配项` };
       }
 
@@ -213,10 +213,10 @@ export class GrepTool extends BaseTool<GrepToolParams, ToolResult> {
         {} as Record<string, GrepMatch[]>,
       );
 
-      let llmContent = `Found ${matches.length} match(es) for pattern "${params.pattern}" in path "${searchDirDisplay}"${params.include ? ` (filter: "${params.include}")` : ''}:\n---\n`;
+      let llmContent = `在路径"${searchDirDisplay}"${params.include ? `（过滤器："${params.include}"）` : ''}中找到 ${matches.length} 个模式"${params.pattern}"的匹配项：\n---\n`;
 
       for (const filePath in matchesByFile) {
-        llmContent += `File: ${filePath}\n`;
+        llmContent += `文件：${filePath}\n`;
         matchesByFile[filePath].forEach((match) => {
           const trimmedLine = match.line.trim();
           llmContent += `L${match.lineNumber}: ${trimmedLine}\n`;

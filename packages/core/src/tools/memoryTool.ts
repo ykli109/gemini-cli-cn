@@ -12,14 +12,14 @@ import { homedir } from 'os';
 const memoryToolSchemaData = {
   name: 'save_memory',
   description:
-    'Saves a specific piece of information or fact to your long-term memory. Use this when the user explicitly asks you to remember something, or when they state a clear, concise fact that seems important to retain for future interactions.',
+    '将特定信息或事实保存到您的长期记忆中。当用户明确要求您记住某些内容时，或者当他们陈述一个清晰、简洁的事实，并且该事实对于您在未来的交互中提供更个性化和有效的帮助很重要时，请使用此工具。',
   parameters: {
     type: 'object',
     properties: {
       fact: {
         type: 'string',
         description:
-          'The specific fact or piece of information to remember. Should be a clear, self-contained statement.',
+          '要记住的特定事实或信息。应该是一个清晰、独立的陈述。',
       },
     },
     required: ['fact'],
@@ -27,22 +27,22 @@ const memoryToolSchemaData = {
 };
 
 const memoryToolDescription = `
-Saves a specific piece of information or fact to your long-term memory.
+将特定信息或事实保存到您的长期记忆中。
 
-Use this tool:
+使用此工具：
 
-- When the user explicitly asks you to remember something (e.g., "Remember that I like pineapple on pizza", "Please save this: my cat's name is Whiskers").
-- When the user states a clear, concise fact about themselves, their preferences, or their environment that seems important for you to retain for future interactions to provide a more personalized and effective assistance.
+- 当用户明确要求您记住某些内容时（例如，"记住我喜欢披萨上的菠萝"，"请保存这个：我的猫叫 Whiskers"）。
+- 当用户陈述一个关于他们自己、他们的偏好或他们的环境的清晰、简洁的事实，并且该事实对于您在未来的交互中提供更个性化和有效的帮助很重要时。
 
-Do NOT use this tool:
+请勿使用此工具：
 
-- To remember conversational context that is only relevant for the current session.
-- To save long, complex, or rambling pieces of text. The fact should be relatively short and to the point.
-- If you are unsure whether the information is a fact worth remembering long-term. If in doubt, you can ask the user, "Should I remember that for you?"
+- 记住仅与当前会话相关的对话上下文。
+- 保存冗长、复杂或杂乱的文本。事实应该相对简短和切中要点。
+- 如果您不确定该信息是否值得长期记忆。如有疑问，您可以询问用户："我应该为您记住这个吗？"
 
-## Parameters
+## 参数
 
-- \`fact\` (string, required): The specific fact or piece of information to remember. This should be a clear, self-contained statement. For example, if the user says "My favorite color is blue", the fact would be "My favorite color is blue".
+- \`fact\` (string, required): 要记住的特定事实或信息。这应该是一个清晰、独立的陈述。例如，如果用户说"我最喜欢的颜色是蓝色"，那么事实就是"我最喜欢的颜色是蓝色"。
 `;
 
 export const GEMINI_CONFIG_DIR = '.gemini';
@@ -102,7 +102,7 @@ export class MemoryTool extends BaseTool<SaveMemoryParams, ToolResult> {
   constructor() {
     super(
       MemoryTool.Name,
-      'Save Memory',
+      '保存记忆',
       memoryToolDescription,
       memoryToolSchemaData.parameters as Record<string, unknown>,
     );
@@ -182,24 +182,14 @@ export class MemoryTool extends BaseTool<SaveMemoryParams, ToolResult> {
     params: SaveMemoryParams,
     _signal: AbortSignal,
   ): Promise<ToolResult> {
-    const { fact } = params;
-
-    if (!fact || typeof fact !== 'string' || fact.trim() === '') {
-      const errorMessage = 'Parameter "fact" must be a non-empty string.';
-      return {
-        llmContent: JSON.stringify({ success: false, error: errorMessage }),
-        returnDisplay: `错误：${errorMessage}`,
-      };
-    }
-
     try {
-      // Use the static method with actual fs promises
+      const { fact } = params;
       await MemoryTool.performAddMemoryEntry(fact, getGlobalMemoryFilePath(), {
         readFile: fs.readFile,
         writeFile: fs.writeFile,
         mkdir: fs.mkdir,
       });
-      const successMessage = `Okay, I've remembered that: "${fact}"`;
+      const successMessage = `好的，我已经记住了："${fact}"`;
       return {
         llmContent: JSON.stringify({ success: true, message: successMessage }),
         returnDisplay: successMessage,
@@ -208,7 +198,7 @@ export class MemoryTool extends BaseTool<SaveMemoryParams, ToolResult> {
       const errorMessage =
         error instanceof Error ? error.message : String(error);
       console.error(
-        `[MemoryTool] Error executing save_memory for fact "${fact}": ${errorMessage}`,
+        `[MemoryTool] Error executing save_memory for fact "${params.fact}": ${errorMessage}`,
       );
       return {
         llmContent: JSON.stringify({
@@ -220,3 +210,4 @@ export class MemoryTool extends BaseTool<SaveMemoryParams, ToolResult> {
     }
   }
 }
+

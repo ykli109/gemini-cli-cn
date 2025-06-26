@@ -142,38 +142,38 @@ export class ReadManyFilesTool extends BaseTool<
           type: 'array',
           items: { type: 'string' },
           description:
-            "Required. An array of glob patterns or paths relative to the tool's target directory. Examples: ['src/**/*.ts'], ['README.md', 'docs/']",
+            "必需。相对于工具目标目录的 glob 模式或路径数组。示例：['src/**/*.ts']、['README.md', 'docs/']",
         },
         include: {
           type: 'array',
           items: { type: 'string' },
           description:
-            'Optional. Additional glob patterns to include. These are merged with `paths`. Example: ["*.test.ts"] to specifically add test files if they were broadly excluded.',
+            '可选。要包含的额外 glob 模式。这些将与 `paths` 合并。示例：[“*.test.ts”] 用于在广泛排除的情况下特定添加测试文件。',
           default: [],
         },
         exclude: {
           type: 'array',
           items: { type: 'string' },
           description:
-            'Optional. Glob patterns for files/directories to exclude. Added to default excludes if useDefaultExcludes is true. Example: ["**/*.log", "temp/"]',
+            '可选。要排除的文件/目录的 glob 模式。如果 useDefaultExcludes 为 true，则添加到默认排除项。示例：[“**/*.log”, “temp/”]',
           default: [],
         },
         recursive: {
           type: 'boolean',
           description:
-            'Optional. Whether to search recursively (primarily controlled by `**` in glob patterns). Defaults to true.',
+            '可选。是否递归搜索（主要由 glob 模式中的 `**` 控制）。默认为 true。',
           default: true,
         },
         useDefaultExcludes: {
           type: 'boolean',
           description:
-            'Optional. Whether to apply a list of default exclusion patterns (e.g., node_modules, .git, binary files). Defaults to true.',
+            '可选。是否应用默认排除模式列表（例如，node_modules、.git、二进制文件）。默认为 true。',
           default: true,
         },
         respect_git_ignore: {
           type: 'boolean',
           description:
-            'Optional. Whether to respect .gitignore patterns when discovering files. Only available in git repositories. Defaults to true.',
+            '可选。在发现文件时是否遵守 .gitignore 模式。仅在 git 仓库中可用。默认为 true。',
           default: true,
         },
       },
@@ -182,17 +182,17 @@ export class ReadManyFilesTool extends BaseTool<
 
     super(
       ReadManyFilesTool.Name,
-      'ReadManyFiles',
-      `Reads content from multiple files specified by paths or glob patterns within a configured target directory. For text files, it concatenates their content into a single string. It is primarily designed for text-based files. However, it can also process image (e.g., .png, .jpg) and PDF (.pdf) files if their file names or extensions are explicitly included in the 'paths' argument. For these explicitly requested non-text files, their data is read and included in a format suitable for model consumption (e.g., base64 encoded).
+      '读取多个文件',
+      `从配置的目标目录中读取由路径或 glob 模式指定的多个文件的内容。对于文本文件，它将其内容连接成一个字符串。它主要设计用于基于文本的文件。但是，如果图像（例如 .png、.jpg）和 PDF (.pdf) 文件的文件名或扩展名在 'paths' 参数中明确包含，它也可以处理这些文件。对于这些明确请求的非文本文件，其数据将以适合模型消费的格式（例如 base64 编码）读取并包含在内。
 
-This tool is useful when you need to understand or analyze a collection of files, such as:
-- Getting an overview of a codebase or parts of it (e.g., all TypeScript files in the 'src' directory).
-- Finding where specific functionality is implemented if the user asks broad questions about code.
-- Reviewing documentation files (e.g., all Markdown files in the 'docs' directory).
-- Gathering context from multiple configuration files.
-- When the user asks to "read all files in X directory" or "show me the content of all Y files".
+此工具在您需要理解或分析文件集合时非常有用，例如：
+- 概览代码库或其部分（例如，'src' 目录中的所有 TypeScript 文件）。
+- 如果用户询问有关代码的广泛问题，查找特定功能的实现位置。
+- 审查文档文件（例如，'docs' 目录中的所有 Markdown 文件）。
+- 从多个配置文件中收集上下文。
+- 当用户要求“读取 X 目录中的所有文件”或“显示所有 Y 文件的内容”时。
 
-Use this tool when the user's query implies needing the content of several files simultaneously for context, analysis, or summarization. For text files, it uses default UTF-8 encoding and a '--- {filePath} ---' separator between file contents. Ensure paths are relative to the target directory. Glob patterns like 'src/**/*.js' are supported. Avoid using for single files if a more specific single-file reading tool is available, unless the user specifically requests to process a list containing just one file via this tool. Other binary files (not explicitly requested as image/PDF) are generally skipped. Default excludes apply to common non-text files (except for explicitly requested images/PDFs) and large dependency directories unless 'useDefaultExcludes' is false.`,
+当用户的查询暗示需要同时获取多个文件的内容以进行上下文、分析或摘要时，请使用此工具。对于文本文件，它使用默认的 UTF-8 编码和 '--- {filePath} ---' 作为文件内容之间的分隔符。确保路径是相对于目标目录的。支持 'src/**/*.js' 等 glob 模式。如果存在更具体的单文件读取工具，请避免将其用于单个文件，除非用户明确要求通过此工具处理仅包含一个文件的列表。其他二进制文件（未明确请求为图像/PDF）通常会被跳过。默认排除项适用于常见的非文本文件（明确请求的图像/PDF 除外）和大型依赖目录，除非 'useDefaultExcludes' 为 false。`,
       parameterSchema,
     );
     this.targetDir = path.resolve(targetDir);

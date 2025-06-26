@@ -67,17 +67,17 @@ export class WriteFileTool
   constructor(private readonly config: Config) {
     super(
       WriteFileTool.Name,
-      'WriteFile',
-      'Writes content to a specified file in the local filesystem.',
+      '写入文件',
+      '将内容写入本地文件系统中的指定文件。',
       {
         properties: {
           file_path: {
             description:
-              "The absolute path to the file to write to (e.g., '/home/user/project/file.txt'). Relative paths are not supported.",
+              "要写入的文件的绝对路径（例如，'/home/user/project/file.txt'）。不支持相对路径。",
             type: 'string',
           },
           content: {
-            description: 'The content to write to the file.',
+            description: '要写入文件的内容。',
             type: 'string',
           },
         },

@@ -88,28 +88,28 @@ export class GlobTool extends BaseTool<GlobToolParams, ToolResult> {
   ) {
     super(
       GlobTool.Name,
-      'FindFiles',
-      'Efficiently finds files matching specific glob patterns (e.g., `src/**/*.ts`, `**/*.md`), returning absolute paths sorted by modification time (newest first). Ideal for quickly locating files based on their name or path structure, especially in large codebases.',
+      '查找文件',
+      '高效查找与特定 glob 模式（例如 `src/**/*.ts`、`**/*.md`）匹配的文件，并返回按修改时间（最新优先）排序的绝对路径。非常适合根据文件名或路径结构快速定位文件，尤其是在大型代码库中。',
       {
         properties: {
           pattern: {
             description:
-              "The glob pattern to match against (e.g., '**/*.py', 'docs/*.md').",
+              "要匹配的 glob 模式（例如，'**/*.py'、'docs/*.md'）。",
             type: 'string',
           },
           path: {
             description:
-              'Optional: The absolute path to the directory to search within. If omitted, searches the root directory.',
+              '可选：要在其中搜索的目录的绝对路径。如果省略，则搜索根目录。',
             type: 'string',
           },
           case_sensitive: {
             description:
-              'Optional: Whether the search should be case-sensitive. Defaults to false.',
+              '可选：搜索是否应该区分大小写。默认为 false。',
             type: 'boolean',
           },
           respect_git_ignore: {
             description:
-              'Optional: Whether to respect .gitignore patterns when finding files. Only available in git repositories. Defaults to true.',
+              '可选：在查找文件时是否遵守 .gitignore 模式。仅在 git 仓库中可用。默认为 true。',
             type: 'boolean',
           },
         },

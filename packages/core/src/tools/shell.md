@@ -1,16 +1,16 @@
-This tool executes a given shell command as `bash -c <command>`.
-Command can start background processes using `&`.
-Command is executed as a subprocess that leads its own process group.
-Command process group can be terminated as `kill -- -PGID` or signaled as `kill -s SIGNAL -- -PGID`.
+此工具以 `bash -c <command>` 形式执行给定的 shell 命令。
+命令可以使用 `&` 启动后台进程。
+命令作为子进程执行，该子进程拥有自己的进程组。
+命令进程组可以通过 `kill -- -PGID` 终止，或通过 `kill -s SIGNAL -- -PGID` 发送信号。
 
-The following information is returned:
+返回以下信息：
 
-Command: Executed command.
-Directory: Directory (relative to project root) where command was executed, or `(root)`.
-Stdout: Output on stdout stream. Can be `(empty)` or partial on error and for any unwaited background processes.
-Stderr: Output on stderr stream. Can be `(empty)` or partial on error and for any unwaited background processes.
-Error: Error or `(none)` if no error was reported for the subprocess.
-Exit Code: Exit code or `(none)` if terminated by signal.
-Signal: Signal number or `(none)` if no signal was received.
-Background PIDs: List of background processes started or `(none)`.
-Process Group PGID: Process group started or `(none)`
+命令：执行的命令。
+目录：执行命令的目录（相对于项目根目录），或 `(root)`。
+标准输出：标准输出流上的输出。可以是 `(empty)` 或在错误时部分输出，以及任何未等待的后台进程的输出。
+标准错误：标准错误流上的输出。可以是 `(empty)` 或在错误时部分输出，以及任何未等待的后台进程的输出。
+错误：错误，如果子进程没有报告错误，则为 `(none)`。
+退出代码：退出代码，如果被信号终止，则为 `(none)`。
+信号：信号编号，如果没有收到信号，则为 `(none)`。
+后台进程ID：启动的后台进程列表，或 `(none)`。
+进程组PGID：启动的进程组，或 `(none)`。

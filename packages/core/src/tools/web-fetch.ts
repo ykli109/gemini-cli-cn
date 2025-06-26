@@ -67,13 +67,13 @@ export class WebFetchTool extends BaseTool<WebFetchToolParams, ToolResult> {
   constructor(private readonly config: Config) {
     super(
       WebFetchTool.Name,
-      'WebFetch',
-      "Processes content from URL(s), including local and private network addresses (e.g., localhost), embedded in a prompt. Include up to 20 URLs and instructions (e.g., summarize, extract specific data) directly in the 'prompt' parameter.",
+      '网页抓取',
+      "处理嵌入在提示中的 URL（最多 20 个）内容，包括本地和私有网络地址（例如 localhost）。直接在 'prompt' 参数中包含 URL 和指令（例如，总结、提取特定数据）。",
       {
         properties: {
           prompt: {
             description:
-              'A comprehensive prompt that includes the URL(s) (up to 20) to fetch and specific instructions on how to process their content (e.g., "Summarize https://example.com/article and extract key points from https://another.com/data"). Must contain as least one URL starting with http:// or https://.',
+              '一个包含要获取的 URL（最多20个）和如何处理其内容的具体指令的综合提示（例如，"总结 https://example.com/article 并从 https://another.com/data 提取关键点"）。必须包含至少一个以 http:// 或 https:// 开头的 URL。',
             type: 'string',
           },
         },
@@ -175,7 +175,7 @@ ${textContent}
       params.prompt.length > 100
         ? params.prompt.substring(0, 97) + '...'
         : params.prompt;
-    return `Processing URLs and instructions from prompt: "${displayPrompt}"`;
+    return `处理来自提示的 URL 和指令："${displayPrompt}"`;
   }
 
   async shouldConfirmExecute(

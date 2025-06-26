@@ -78,37 +78,37 @@ export class EditTool
   constructor(config: Config) {
     super(
       EditTool.Name,
-      'Edit',
-      `Replaces text within a file. By default, replaces a single occurrence, but can replace multiple occurrences when \`expected_replacements\` is specified. This tool requires providing significant context around the change to ensure precise targeting. Always use the ${ReadFileTool.Name} tool to examine the file's current content before attempting a text replacement.
+      '编辑',
+      `替换文件中的文本。默认情况下替换单个匹配项，但当指定 \`expected_replacements\` 时可以替换多个匹配项。此工具需要在更改周围提供充分的上下文以确保精确定位。在尝试文本替换之前，始终使用 ${ReadFileTool.Name} 工具检查文件的当前内容。
 
-Expectation for required parameters:
-1. \`file_path\` MUST be an absolute path; otherwise an error will be thrown.
-2. \`old_string\` MUST be the exact literal text to replace (including all whitespace, indentation, newlines, and surrounding code etc.).
-3. \`new_string\` MUST be the exact literal text to replace \`old_string\` with (also including all whitespace, indentation, newlines, and surrounding code etc.). Ensure the resulting code is correct and idiomatic.
-4. NEVER escape \`old_string\` or \`new_string\`, that would break the exact literal text requirement.
-**Important:** If ANY of the above are not satisfied, the tool will fail. CRITICAL for \`old_string\`: Must uniquely identify the single instance to change. Include at least 3 lines of context BEFORE and AFTER the target text, matching whitespace and indentation precisely. If this string matches multiple locations, or does not match exactly, the tool will fail.
-**Multiple replacements:** Set \`expected_replacements\` to the number of occurrences you want to replace. The tool will replace ALL occurrences that match \`old_string\` exactly. Ensure the number of replacements matches your expectation.`,
+必需参数的期望：
+1. \`file_path\` 必须是绝对路径；否则将抛出错误。
+2. \`old_string\` 必须是要替换的确切字面文本（包括所有空白、缩进、换行和周围代码等）。
+3. \`new_string\` 必须是用来替换 \`old_string\` 的确切字面文本（也包括所有空白、缩进、换行和周围代码等）。确保结果代码是正确和惯用的。
+4. 永远不要转义 \`old_string\` 或 \`new_string\`，这会破坏确切字面文本的要求。
+**重要：** 如果上述任何一项不满足，工具将失败。对于 \`old_string\` 的关键要求：必须唯一标识要更改的单个实例。在目标文本的前后至少包含3行上下文，精确匹配空白和缩进。如果此字符串匹配多个位置，或不能精确匹配，工具将失败。
+**多重替换：** 将 \`expected_replacements\` 设置为您要替换的匹配数量。工具将替换所有精确匹配 \`old_string\` 的匹配项。确保替换数量符合您的期望。`,
       {
         properties: {
           file_path: {
             description:
-              "The absolute path to the file to modify. Must start with '/'.",
+              "要修改的文件的绝对路径。必须以 '/' 开头。",
             type: 'string',
           },
           old_string: {
             description:
-              'The exact literal text to replace, preferably unescaped. For single replacements (default), include at least 3 lines of context BEFORE and AFTER the target text, matching whitespace and indentation precisely. For multiple replacements, specify expected_replacements parameter. If this string is not the exact literal text (i.e. you escaped it) or does not match exactly, the tool will fail.',
+              '要替换的确切字面文本，优选不转义。对于单个替换（默认），在目标文本的前后至少包含3行上下文，精确匹配空白和缩进。对于多重替换，请指定 expected_replacements 参数。如果此字符串不是确切的字面文本（即您转义了它）或不能精确匹配，工具将失败。',
             type: 'string',
           },
           new_string: {
             description:
-              'The exact literal text to replace `old_string` with, preferably unescaped. Provide the EXACT text. Ensure the resulting code is correct and idiomatic.',
+              '用来替换 `old_string` 的确切字面文本，优选不转义。提供确切的文本。确保结果代码是正确和惯用的。',
             type: 'string',
           },
           expected_replacements: {
             type: 'number',
             description:
-              'Number of replacements expected. Defaults to 1 if not specified. Use when you want to replace multiple occurrences.',
+              '期望的替换数量。如果未指定，默认为1。当您要替换多个匹配项时使用。',
             minimum: 1,
           },
         },

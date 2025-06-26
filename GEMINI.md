@@ -1,182 +1,182 @@
-## Building and running
+## 构建和运行
 
-Before submitting any changes, it is crucial to validate them by running the full preflight check. This command will build the repository, run all tests, check for type errors, and lint the code.
+在提交任何更改之前，通过运行完整的预检检查来验证它们至关重要。此命令将构建仓库，运行所有测试，检查类型错误，并 lint 代码。
 
-To run the full suite of checks, execute the following command:
+要运行完整的检查套件，请执行以下命令：
 
 ```bash
 npm run preflight
 ```
 
-This single command ensures that your changes meet all the quality gates of the project. While you can run the individual steps (`build`, `test`, `typecheck`, `lint`) separately, it is highly recommended to use `npm run preflight` to ensure a comprehensive validation.
+此单个命令可确保您的更改符合项目的所有质量门。虽然您可以单独运行各个步骤（`build`、`test`、`typecheck`、`lint`），但强烈建议使用 `npm run preflight` 来确保全面的验证。
 
-## Writing Tests
+## 编写测试
 
-This project uses **Vitest** as its primary testing framework. When writing tests, aim to follow existing patterns. Key conventions include:
+本项目使用 **Vitest** 作为其主要测试框架。在编写测试时，请遵循现有模式。主要约定包括：
 
-### Test Structure and Framework
+### 测试结构和框架
 
-- **Framework**: All tests are written using Vitest (`describe`, `it`, `expect`, `vi`).
-- **File Location**: Test files (`*.test.ts` for logic, `*.test.tsx` for React components) are co-located with the source files they test.
-- **Configuration**: Test environments are defined in `vitest.config.ts` files.
-- **Setup/Teardown**: Use `beforeEach` and `afterEach`. Commonly, `vi.resetAllMocks()` is called in `beforeEach` and `vi.restoreAllMocks()` in `afterEach`.
+- **框架**：所有测试都使用 Vitest (`describe`、`it`、`expect`、`vi`) 编写。
+- **文件位置**：测试文件（逻辑的 `*.test.ts`，React 组件的 `*.test.tsx`）与它们测试的源文件位于同一位置。
+- **配置**：测试环境在 `vitest.config.ts` 文件中定义。
+- **设置/拆卸**：使用 `beforeEach` 和 `afterEach`。通常，`vi.resetAllMocks()` 在 `beforeEach` 中调用，`vi.restoreAllMocks()` 在 `afterEach` 中调用。
 
-### Mocking (`vi` from Vitest)
+### 模拟 (`vi` from Vitest)
 
-- **ES Modules**: Mock with `vi.mock('module-name', async (importOriginal) => { ... })`. Use `importOriginal` for selective mocking.
-  - _Example_: `vi.mock('os', async (importOriginal) => { const actual = await importOriginal(); return { ...actual, homedir: vi.fn() }; });`
-- **Mocking Order**: For critical dependencies (e.g., `os`, `fs`) that affect module-level constants, place `vi.mock` at the _very top_ of the test file, before other imports.
-- **Hoisting**: Use `const myMock = vi.hoisted(() => vi.fn());` if a mock function needs to be defined before its use in a `vi.mock` factory.
-- **Mock Functions**: Create with `vi.fn()`. Define behavior with `mockImplementation()`, `mockResolvedValue()`, or `mockRejectedValue()`.
-- **Spying**: Use `vi.spyOn(object, 'methodName')`. Restore spies with `mockRestore()` in `afterEach`.
+- **ES 模块**：使用 `vi.mock('module-name', async (importOriginal) => { ... })` 进行模拟。使用 `importOriginal` 进行选择性模拟。
+  - _示例_：`vi.mock('os', async (importOriginal) => { const actual = await importOriginal(); return { ...actual, homedir: vi.fn() }; });`
+- **模拟顺序**：对于影响模块级常量的关键依赖项（例如 `os`、`fs`），请将 `vi.mock` 放在测试文件的_最顶部_，在其他导入之前。
+- **提升**：如果模拟函数需要在 `vi.mock` 工厂中使用之前定义，请使用 `const myMock = vi.hoisted(() => vi.fn());`。
+- **模拟函数**：使用 `vi.fn()` 创建。使用 `mockImplementation()`、`mockResolvedValue()` 或 `mockRejectedValue()` 定义行为。
+- **监视**：使用 `vi.spyOn(object, 'methodName')`。在 `afterEach` 中使用 `mockRestore()` 恢复监视。
 
-### Commonly Mocked Modules
+### 常用模拟模块
 
-- **Node.js built-ins**: `fs`, `fs/promises`, `os` (especially `os.homedir()`), `path`, `child_process` (`execSync`, `spawn`).
-- **External SDKs**: `@google/genai`, `@modelcontextprotocol/sdk`.
-- **Internal Project Modules**: Dependencies from other project packages are often mocked.
+- **Node.js 内置模块**：`fs`、`fs/promises`、`os`（尤其是 `os.homedir()`）、`path`、`child_process`（`execSync`、`spawn`）。
+- **外部 SDK**：`@google/genai`、`@modelcontextprotocol/sdk`。
+- **内部项目模块**：来自其他项目包的依赖项通常被模拟。
 
-### React Component Testing (CLI UI - Ink)
+### React 组件测试 (CLI UI - Ink)
 
-- Use `render()` from `ink-testing-library`.
-- Assert output with `lastFrame()`.
-- Wrap components in necessary `Context.Provider`s.
-- Mock custom React hooks and complex child components using `vi.mock()`.
+- 使用 `ink-testing-library` 中的 `render()`。
+- 使用 `lastFrame()` 断言输出。
+- 将组件包装在必要的 `Context.Provider` 中。
+- 使用 `vi.mock()` 模拟自定义 React 钩子和复杂的子组件。
 
-### Asynchronous Testing
+### 异步测试
 
-- Use `async/await`.
-- For timers, use `vi.useFakeTimers()`, `vi.advanceTimersByTimeAsync()`, `vi.runAllTimersAsync()`.
-- Test promise rejections with `await expect(promise).rejects.toThrow(...)`.
+- 使用 `async/await`。
+- 对于计时器，使用 `vi.useFakeTimers()`、`vi.advanceTimersByTimeAsync()`、`vi.runAllTimersAsync()`。
+- 使用 `await expect(promise).rejects.toThrow(...)` 测试 Promise 拒绝。
 
-### General Guidance
+### 一般指导
 
-- When adding tests, first examine existing tests to understand and conform to established conventions.
-- Pay close attention to the mocks at the top of existing test files; they reveal critical dependencies and how they are managed in a test environment.
+- 添加测试时，首先检查现有测试以理解并符合既定约定。
+- 密切关注现有测试文件顶部的模拟；它们揭示了关键依赖项以及它们在测试环境中的管理方式。
 
-## Git Repo
+## Git 仓库
 
-The main branch for this project is called "main"
+本项目的主分支名为“main”
 
 ## JavaScript/TypeScript
 
-When contributing to this React, Node, and TypeScript codebase, please prioritize the use of plain JavaScript objects with accompanying TypeScript interface or type declarations over JavaScript class syntax. This approach offers significant advantages, especially concerning interoperability with React and overall code maintainability.
+在为这个 React、Node 和 TypeScript 代码库做贡献时，请优先使用带有 TypeScript 接口或类型声明的纯 JavaScript 对象，而不是 JavaScript 类语法。这种方法具有显著的优势，尤其是在与 React 的互操作性和整体代码可维护性方面。
 
-### Preferring Plain Objects over Classes
+### 优先使用纯对象而不是类
 
-JavaScript classes, by their nature, are designed to encapsulate internal state and behavior. While this can be useful in some object-oriented paradigms, it often introduces unnecessary complexity and friction when working with React's component-based architecture. Here's why plain objects are preferred:
+JavaScript 类本质上旨在封装内部状态和行为。虽然这在某些面向对象范式中可能很有用，但它在与 React 的基于组件的架构一起使用时通常会引入不必要的复杂性和摩擦。以下是为什么首选纯对象的原因：
 
-- Seamless React Integration: React components thrive on explicit props and state management. Classes' tendency to store internal state directly within instances can make prop and state propagation harder to reason about and maintain. Plain objects, on the other hand, are inherently immutable (when used thoughtfully) and can be easily passed as props, simplifying data flow and reducing unexpected side effects.
+- 无缝 React 集成：React 组件依赖于显式 props 和状态管理。类直接在实例中存储内部状态的倾向会使 props 和状态传播更难推理和维护。另一方面，纯对象本质上是不可变的（如果经过深思熟虑地使用），并且可以轻松地作为 props 传递，从而简化数据流并减少意外的副作用。
 
-- Reduced Boilerplate and Increased Conciseness: Classes often promote the use of constructors, this binding, getters, setters, and other boilerplate that can unnecessarily bloat code. TypeScript interface and type declarations provide powerful static type checking without the runtime overhead or verbosity of class definitions. This allows for more succinct and readable code, aligning with JavaScript's strengths in functional programming.
+- 减少样板和提高简洁性：类通常会促进使用构造函数、`this` 绑定、getter、setter 和其他样板，这些样板会不必要地膨胀代码。TypeScript 接口和类型声明提供了强大的静态类型检查，而没有运行时开销或类定义的冗长。这允许更简洁和可读的代码，与 JavaScript 在函数式编程方面的优势保持一致。
 
-- Enhanced Readability and Predictability: Plain objects, especially when their structure is clearly defined by TypeScript interfaces, are often easier to read and understand. Their properties are directly accessible, and there's no hidden internal state or complex inheritance chains to navigate. This predictability leads to fewer bugs and a more maintainable codebase.
-  Simplified Immutability: While not strictly enforced, plain objects encourage an immutable approach to data. When you need to modify an object, you typically create a new one with the desired changes, rather than mutating the original. This pattern aligns perfectly with React's reconciliation process and helps prevent subtle bugs related to shared mutable state.
+- 增强可读性和可预测性：纯 JavaScript 对象，特别是当它们的结构由 TypeScript 接口清晰定义时，通常更容易阅读和理解。它们的属性可以直接访问，并且没有隐藏的内部状态或复杂的继承链需要导航。这种可预测性可以减少错误并提高代码库的可维护性。
+  简化不变性：虽然不是严格强制的，但纯对象鼓励对数据采用不变的方法。当您需要修改对象时，您通常会创建一个带有所需更改的新对象，而不是修改原始对象。这种模式与 React 的协调过程完美契合，并有助于防止与共享可变状态相关的细微错误。
 
-- Better Serialization and Deserialization: Plain JavaScript objects are naturally easy to serialize to JSON and deserialize back, which is a common requirement in web development (e.g., for API communication or local storage). Classes, with their methods and prototypes, can complicate this process.
+- 更好的序列化和反序列化：纯 JavaScript 对象自然易于序列化为 JSON 并反序列化回来，这是 Web 开发中的常见要求（例如，用于 API 通信或本地存储）。类及其方法和原型可能会使此过程复杂化。
 
-### Embracing ES Module Syntax for Encapsulation
+### 拥抱 ES 模块语法进行封装
 
-Rather than relying on Java-esque private or public class members, which can be verbose and sometimes limit flexibility, we strongly prefer leveraging ES module syntax (`import`/`export`) for encapsulating private and public APIs.
+我们强烈倾向于利用 ES 模块语法（`import`/`export`）来封装私有和公共 API，而不是依赖 Java 风格的私有或公共类成员，后者可能冗长且有时会限制灵活性。
 
-- Clearer Public API Definition: With ES modules, anything that is exported is part of the public API of that module, while anything not exported is inherently private to that module. This provides a very clear and explicit way to define what parts of your code are meant to be consumed by other modules.
+- 更清晰的公共 API 定义：使用 ES 模块，任何导出的内容都是该模块公共 API 的一部分，而任何未导出的内容则本质上是该模块私有的。这提供了一种非常清晰和明确的方式来定义代码的哪些部分旨在被其他模块使用。
 
-- Enhanced Testability (Without Exposing Internals): By default, unexported functions or variables are not accessible from outside the module. This encourages you to test the public API of your modules, rather than their internal implementation details. If you find yourself needing to spy on or stub an unexported function for testing purposes, it's often a "code smell" indicating that the function might be a good candidate for extraction into its own separate, testable module with a well-defined public API. This promotes a more robust and maintainable testing strategy.
+- 增强可测试性（不暴露内部）：默认情况下，未导出的函数或变量无法从模块外部访问。这鼓励您测试模块的公共 API，而不是其内部实现细节。如果您发现自己需要为了测试目的监视或存根未导出的函数，这通常是“代码异味”，表明该函数可能是提取到具有明确定义的公共 API 的独立可测试模块的良好候选者。这促进了更健壮和可维护的测试策略。
 
-- Reduced Coupling: Explicitly defined module boundaries through import/export help reduce coupling between different parts of your codebase. This makes it easier to refactor, debug, and understand individual components in isolation.
+- 减少耦合：通过 `import`/`export` 明确定义的模块边界有助于减少代码库不同部分之间的耦合。这使得重构、调试和独立理解单个组件变得更容易。
 
-### Avoiding `any` Types and Type Assertions; Preferring `unknown`
+### 避免 `any` 类型和类型断言；优先使用 `unknown`
 
-TypeScript's power lies in its ability to provide static type checking, catching potential errors before your code runs. To fully leverage this, it's crucial to avoid the `any` type and be judicious with type assertions.
+TypeScript 的强大之处在于它能够提供静态类型检查，在代码运行之前捕获潜在错误。为了充分利用这一点，避免 `any` 类型并谨慎使用类型断言至关重要。
 
-- **The Dangers of `any`**: Using any effectively opts out of TypeScript's type checking for that particular variable or expression. While it might seem convenient in the short term, it introduces significant risks:
+- **`any` 的危险**：使用 `any` 实际上会选择退出 TypeScript 对该特定变量或表达式的类型检查。虽然短期内可能看起来很方便，但它会带来重大风险：
 
-  - **Loss of Type Safety**: You lose all the benefits of type checking, making it easy to introduce runtime errors that TypeScript would otherwise have caught.
-  - **Reduced Readability and Maintainability**: Code with `any` types is harder to understand and maintain, as the expected type of data is no longer explicitly defined.
-  - **Masking Underlying Issues**: Often, the need for any indicates a deeper problem in the design of your code or the way you're interacting with external libraries. It's a sign that you might need to refine your types or refactor your code.
+  - **失去类型安全**：您将失去类型检查的所有好处，从而很容易引入 TypeScript 本可以捕获的运行时错误。
+  - **降低可读性和可维护性**：带有 `any` 类型的代码更难理解和维护，因为数据预期类型不再明确定义。
+  - **掩盖潜在问题**：通常，需要 `any` 表明您的代码设计或与外部库交互方式存在更深层次的问题。这表明您可能需要改进类型或重构代码。
 
-- **Preferring `unknown` over `any`**: When you absolutely cannot determine the type of a value at compile time, and you're tempted to reach for any, consider using unknown instead. unknown is a type-safe counterpart to any. While a variable of type unknown can hold any value, you must perform type narrowing (e.g., using typeof or instanceof checks, or a type assertion) before you can perform any operations on it. This forces you to handle the unknown type explicitly, preventing accidental runtime errors.
+- **优先使用 `unknown` 而不是 `any`**：当您绝对无法在编译时确定值的类型，并且您想使用 `any` 时，请考虑使用 `unknown`。`unknown` 是 `any` 的类型安全对应物。虽然 `unknown` 类型的变量可以保存任何值，但您必须在对其执行任何操作之前执行类型缩小（例如，使用 `typeof` 或 `instanceof` 检查，或类型断言）。这会强制您明确处理 `unknown` 类型，从而防止意外的运行时错误。
 
   ```
   function processValue(value: unknown) {
      if (typeof value === 'string') {
-        // value is now safely a string
+        // value 现在安全地是字符串
         console.log(value.toUpperCase());
      } else if (typeof value === 'number') {
-        // value is now safely a number
+        // value 现在安全地是数字
         console.log(value * 2);
      }
-     // Without narrowing, you cannot access properties or methods on 'value'
-     // console.log(value.someProperty); // Error: Object is of type 'unknown'.
+     // 在不缩小范围的情况下，您无法访问“value”上的属性或方法
+     // console.log(value.someProperty); // 错误：对象类型为“unknown”。
   }
   ```
 
-- **Type Assertions (`as Type`) - Use with Caution**: Type assertions tell the TypeScript compiler, "Trust me, I know what I'm doing; this is definitely of this type." While there are legitimate use cases (e.g., when dealing with external libraries that don't have perfect type definitions, or when you have more information than the compiler), they should be used sparingly and with extreme caution.
-  - **Bypassing Type Checking**: Like `any`, type assertions bypass TypeScript's safety checks. If your assertion is incorrect, you introduce a runtime error that TypeScript would not have warned you about.
-  - **Code Smell in Testing**: A common scenario where `any` or type assertions might be tempting is when trying to test "private" implementation details (e.g., spying on or stubbing an unexported function within a module). This is a strong indication of a "code smell" in your testing strategy and potentially your code structure. Instead of trying to force access to private internals, consider whether those internal details should be refactored into a separate module with a well-defined public API. This makes them inherently testable without compromising encapsulation.
+- **类型断言 (`as Type`) - 谨慎使用**：类型断言告诉 TypeScript 编译器，“相信我，我知道我在做什么；这绝对是这种类型。”虽然存在合法用例（例如，处理没有完美类型定义的外部库，或者您拥有比编译器更多信息时），但应谨慎使用，并极其小心。
+  - **绕过类型检查**：与 `any` 一样，类型断言会绕过 TypeScript 的安全检查。如果您的断言不正确，您将引入 TypeScript 不会警告您的运行时错误。
+  - **测试中的代码异味**：`any` 或类型断言可能很诱人的常见场景是尝试测试“私有”实现细节（例如，监视或存根模块中未导出的函数）。这强烈表明您的测试策略和潜在的代码结构存在“代码异味”。与其尝试强制访问私有内部，不如考虑是否应将这些内部细节重构为具有明确定义的公共 API 的单独模块。这使得它们本质上是可测试的，而不会损害封装。
 
-### Embracing JavaScript's Array Operators
+### 拥抱 JavaScript 的数组操作符
 
-To further enhance code cleanliness and promote safe functional programming practices, leverage JavaScript's rich set of array operators as much as possible. Methods like `.map()`, `.filter()`, `.reduce()`, `.slice()`, `.sort()`, and others are incredibly powerful for transforming and manipulating data collections in an immutable and declarative way.
+为了进一步提高代码的整洁性并促进安全的函数式编程实践，请尽可能利用 JavaScript 丰富的数组操作符。像 `.map()`、`.filter()`、`.reduce()`、`.slice()`、`.sort()` 等方法对于以不可变和声明式方式转换和操作数据集合非常强大。
 
-Using these operators:
+使用这些操作符：
 
-- Promotes Immutability: Most array operators return new arrays, leaving the original array untouched. This functional approach helps prevent unintended side effects and makes your code more predictable.
-- Improves Readability: Chaining array operators often leads to more concise and expressive code than traditional for loops or imperative logic. The intent of the operation is clear at a glance.
-- Facilitates Functional Programming: These operators are cornerstones of functional programming, encouraging the creation of pure functions that take inputs and produce outputs without causing side effects. This paradigm is highly beneficial for writing robust and testable code that pairs well with React.
+- 促进不变性：大多数数组操作符返回新数组，保持原始数组不变。这种函数式方法有助于防止意外的副作用，并使您的代码更具可预测性。
+- 提高可读性：链式数组操作符通常比传统的 `for` 循环或命令式逻辑更简洁和富有表现力。操作的意图一目了然。
+- 促进函数式编程：这些操作符是函数式编程的基石，鼓励创建纯函数，这些函数接受输入并产生输出，而不会产生副作用。这种范式对于编写健壮且可测试的代码非常有益，并且与 React 配合得很好。
 
-By consistently applying these principles, we can maintain a codebase that is not only efficient and performant but also a joy to work with, both now and in the future.
+通过始终如一地应用这些原则，我们可以维护一个不仅高效且高性能，而且现在和将来都令人愉悦的代码库。
 
-## React (mirrored and adjusted from [react-mcp-server](https://github.com/facebook/react/blob/4448b18760d867f9e009e810571e7a3b8930bb19/compiler/packages/react-mcp-server/src/index.ts#L376C1-L441C94))
+## React (镜像并调整自 [react-mcp-server](https://github.com/facebook/react/blob/4448b18760d867f9e009e810571e7a3b8930bb19/compiler/packages/react-mcp-server/src/index.ts#L376C1-L441C94))
 
-### Role
+### 角色
 
-You are a React assistant that helps users write more efficient and optimizable React code. You specialize in identifying patterns that enable React Compiler to automatically apply optimizations, reducing unnecessary re-renders and improving application performance.
+您是 React 助手，帮助用户编写更高效和可优化的 React 代码。您专注于识别能够使 React 编译器自动应用优化的模式，从而减少不必要的重新渲染并提高应用程序性能。
 
-### Follow these guidelines in all code you produce and suggest
+### 在您生成和建议的所有代码中遵循以下准则
 
-Use functional components with Hooks: Do not generate class components or use old lifecycle methods. Manage state with useState or useReducer, and side effects with useEffect (or related Hooks). Always prefer functions and Hooks for any new component logic.
+使用带有 Hooks 的函数组件：不要生成类组件或使用旧的生命周期方法。使用 `useState` 或 `useReducer` 管理状态，使用 `useEffect`（或相关 Hooks）管理副作用。对于任何新的组件逻辑，始终优先使用函数和 Hooks。
 
-Keep components pure and side-effect-free during rendering: Do not produce code that performs side effects (like subscriptions, network requests, or modifying external variables) directly inside the component's function body. Such actions should be wrapped in useEffect or performed in event handlers. Ensure your render logic is a pure function of props and state.
+在渲染期间保持组件纯净且无副作用：不要生成直接在组件函数体内部执行副作用（如订阅、网络请求或修改外部变量）的代码。此类操作应封装在 `useEffect` 中或在事件处理程序中执行。确保您的渲染逻辑是 props 和状态的纯函数。
 
-Respect one-way data flow: Pass data down through props and avoid any global mutations. If two components need to share data, lift that state up to a common parent or use React Context, rather than trying to sync local state or use external variables.
+尊重单向数据流：通过 props 向下传递数据，并避免任何全局突变。如果两个组件需要共享数据，请将该状态提升到共同的父级或使用 React Context，而不是尝试同步本地状态或使用外部变量。
 
-Never mutate state directly: Always generate code that updates state immutably. For example, use spread syntax or other methods to create new objects/arrays when updating state. Do not use assignments like state.someValue = ... or array mutations like array.push() on state variables. Use the state setter (setState from useState, etc.) to update state.
+切勿直接修改状态：始终生成不可变地更新状态的代码。例如，使用扩展语法或其他方法在更新状态时创建新对象/数组。不要在状态变量上使用 `state.someValue = ...` 或数组修改（如 `array.push()`）。使用状态设置器（`useState` 返回的 `setState` 等）来更新状态。
 
-Accurately use useEffect and other effect Hooks: whenever you think you could useEffect, think and reason harder to avoid it. useEffect is primarily only used for synchronization, for example synchronizing React with some external state. IMPORTANT - Don't setState (the 2nd value returned by useState) within a useEffect as that will degrade performance. When writing effects, include all necessary dependencies in the dependency array. Do not suppress ESLint rules or omit dependencies that the effect's code uses. Structure the effect callbacks to handle changing values properly (e.g., update subscriptions on prop changes, clean up on unmount or dependency change). If a piece of logic should only run in response to a user action (like a form submission or button click), put that logic in an event handler, not in a useEffect. Where possible, useEffects should return a cleanup function.
+准确使用 `useEffect` 和其他 effect Hooks：每当您认为可以使用 `useEffect` 时，请更深入地思考和推理以避免它。`useEffect` 主要仅用于同步，例如将 React 与某些外部状态同步。重要提示 - 不要在 `useEffect` 中设置状态（`useState` 返回的第二个值），因为这会降低性能。在编写 effect 时，将所有必要的依赖项包含在依赖项数组中。不要抑制 ESLint 规则或省略 effect 代码使用的依赖项。构建 effect 回调以正确处理更改的值（例如，在 props 更改时更新订阅，在卸载或依赖项更改时清理）。如果一段逻辑只应响应用户操作（如表单提交或按钮点击）而运行，请将该逻辑放在事件处理程序中，而不是 `useEffect` 中。在可能的情况下，`useEffect` 应返回一个清理函数。
 
-Follow the Rules of Hooks: Ensure that any Hooks (useState, useEffect, useContext, custom Hooks, etc.) are called unconditionally at the top level of React function components or other Hooks. Do not generate code that calls Hooks inside loops, conditional statements, or nested helper functions. Do not call Hooks in non-component functions or outside the React component rendering context.
+遵循 Hooks 规则：确保任何 Hooks（`useState`、`useEffect`、`useContext`、自定义 Hooks 等）都在 React 函数组件或其他 Hooks 的顶层无条件调用。不要生成在循环、条件语句或嵌套辅助函数内部调用 Hooks 的代码。不要在非组件函数或 React 组件渲染上下文之外调用 Hooks。
 
-Use refs only when necessary: Avoid using useRef unless the task genuinely requires it (such as focusing a control, managing an animation, or integrating with a non-React library). Do not use refs to store application state that should be reactive. If you do use refs, never write to or read from ref.current during the rendering of a component (except for initial setup like lazy initialization). Any ref usage should not affect the rendered output directly.
+仅在必要时使用 refs：除非任务确实需要（例如聚焦控件、管理动画或与非 React 库集成），否则避免使用 `useRef`。不要使用 refs 存储应具有响应性的应用程序状态。如果您确实使用 refs，切勿在组件渲染期间写入或读取 `ref.current`（除了像惰性初始化这样的初始设置）。任何 ref 使用都不应直接影响渲染输出。
 
-Prefer composition and small components: Break down UI into small, reusable components rather than writing large monolithic components. The code you generate should promote clarity and reusability by composing components together. Similarly, abstract repetitive logic into custom Hooks when appropriate to avoid duplicating code.
+偏爱组合和小型组件：将 UI 分解为小型、可重用的组件，而不是编写大型单体组件。您生成的代码应通过组合组件来提高清晰度和可重用性。同样，在适当的时候将重复逻辑抽象为自定义 Hooks，以避免代码重复。
 
-Optimize for concurrency: Assume React may render your components multiple times for scheduling purposes (especially in development with Strict Mode). Write code that remains correct even if the component function runs more than once. For instance, avoid side effects in the component body and use functional state updates (e.g., setCount(c => c + 1)) when updating state based on previous state to prevent race conditions. Always include cleanup functions in effects that subscribe to external resources. Don't write useEffects for "do this when this changes" side-effects. This ensures your generated code will work with React's concurrent rendering features without issues.
+优化并发：假设 React 可能会出于调度目的多次渲染您的组件（尤其是在 Strict Mode 的开发中）。编写即使组件函数运行多次也能保持正确的代码。例如，避免在组件体中产生副作用，并在基于先前状态更新状态时使用函数式状态更新（例如 `setCount(c => c + 1)`）以防止竞态条件。始终在订阅外部资源的 effect 中包含清理函数。不要为“当此更改时执行此操作”的副作用编写 `useEffect`。这确保您生成的代码将与 React 的并发渲染功能一起工作而不会出现问题。
 
-Optimize to reduce network waterfalls - Use parallel data fetching wherever possible (e.g., start multiple requests at once rather than one after another). Leverage Suspense for data loading and keep requests co-located with the component that needs the data. In a server-centric approach, fetch related data together in a single request on the server side (using Server Components, for example) to reduce round trips. Also, consider using caching layers or global fetch management to avoid repeating identical requests.
+优化以减少网络瀑布 - 尽可能使用并行数据获取（例如，同时启动多个请求而不是一个接一个）。利用 Suspense 进行数据加载，并将请求与需要数据的组件放在一起。在以服务器为中心的方法中，在服务器端（例如使用 Server Components）在一个请求中一起获取相关数据，以减少往返。此外，考虑使用缓存层或全局获取管理以避免重复相同的请求。
 
-Rely on React Compiler - useMemo, useCallback, and React.memo can be omitted if React Compiler is enabled. Avoid premature optimization with manual memoization. Instead, focus on writing clear, simple components with direct data flow and side-effect-free render functions. Let the React Compiler handle tree-shaking, inlining, and other performance enhancements to keep your code base simpler and more maintainable.
+依赖 React 编译器 - 如果启用了 React 编译器，则可以省略 `useMemo`、`useCallback` 和 `React.memo`。避免过早优化与手动记忆化。相反，专注于编写清晰、简单的组件，具有直接的数据流和无副作用的渲染函数。让 React 编译器处理 tree-shaking、内联和其他性能增强，以使您的代码库更简单、更易于维护。
 
-Design for a good user experience - Provide clear, minimal, and non-blocking UI states. When data is loading, show lightweight placeholders (e.g., skeleton screens) rather than intrusive spinners everywhere. Handle errors gracefully with a dedicated error boundary or a friendly inline message. Where possible, render partial data as it becomes available rather than making the user wait for everything. Suspense allows you to declare the loading states in your component tree in a natural way, preventing “flash” states and improving perceived performance.
+设计良好的用户体验 - 提供清晰、最小且非阻塞的 UI 状态。当数据加载时，显示轻量级占位符（例如骨架屏），而不是到处都是侵入性的加载动画。使用专用的错误边界或友好的内联消息优雅地处理错误。在可能的情况下，在数据可用时渲染部分数据，而不是让用户等待所有数据。Suspense 允许您以自然的方式在组件树中声明加载状态，从而防止“闪烁”状态并提高感知性能。
 
-### Process
+### 流程
 
-1. Analyze the user's code for optimization opportunities:
+1. 分析用户代码以寻找优化机会：
 
-   - Check for React anti-patterns that prevent compiler optimization
-   - Look for component structure issues that limit compiler effectiveness
-   - Think about each suggestion you are making and consult React docs for best practices
+   - 检查阻止编译器优化的 React 反模式
+   - 查找限制编译器效率的组件结构问题
+   - 思考您提出的每个建议并查阅 React 文档以获取最佳实践
 
-2. Provide actionable guidance:
-   - Explain specific code changes with clear reasoning
-   - Show before/after examples when suggesting changes
-   - Only suggest changes that meaningfully improve optimization potential
+2. 提供可操作的指导：
+   - 用清晰的理由解释具体的代码更改
+   - 在建议更改时显示前后示例
+   - 仅建议能显著提高优化潜力的更改
 
-### Optimization Guidelines
+### 优化指南
 
-- State updates should be structured to enable granular updates
-- Side effects should be isolated and dependencies clearly defined
+- 状态更新应结构化以实现细粒度更新
+- 副作用应隔离且依赖项明确定义
 
-## Comments policy
+## 注释策略
 
-Only write high-value comments if at all. Avoid talking to the user through comments.
+只编写高价值的注释（如果有的话）。避免通过注释与用户交流。

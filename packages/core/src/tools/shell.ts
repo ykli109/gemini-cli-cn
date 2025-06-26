@@ -34,7 +34,7 @@ export class ShellTool extends BaseTool<ShellToolParams, ToolResult> {
   private whitelist: Set<string> = new Set();
 
   constructor(private readonly config: Config) {
-    const toolDisplayName = 'Shell';
+    const toolDisplayName = 'Shell命令';
 
     let toolDescription: string;
     let toolParameterSchema: Record<string, unknown>;
@@ -50,9 +50,9 @@ export class ShellTool extends BaseTool<ShellToolParams, ToolResult> {
       toolParameterSchema = {
         type: 'object',
         properties: {
-          command: { type: 'string', description: 'Command to execute' },
-          description: { type: 'string', description: 'Command description' },
-          directory: { type: 'string', description: 'Working directory' },
+          command: { type: 'string', description: '要执行的命令' },
+          description: { type: 'string', description: '命令描述' },
+          directory: { type: 'string', description: '工作目录' },
         },
         required: ['command'],
       };

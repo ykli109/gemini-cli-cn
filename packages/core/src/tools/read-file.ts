@@ -48,24 +48,24 @@ export class ReadFileTool extends BaseTool<ReadFileToolParams, ToolResult> {
   ) {
     super(
       ReadFileTool.Name,
-      'ReadFile',
-      'Reads and returns the content of a specified file from the local filesystem. Handles text, images (PNG, JPG, GIF, WEBP, SVG, BMP), and PDF files. For text files, it can read specific line ranges.',
+      '读取文件',
+      '从本地文件系统读取并返回指定文件的内容。支持文本、图像（PNG、JPG、GIF、WEBP、SVG、BMP）和 PDF 文件。对于文本文件，可以读取特定行范围。',
       {
         properties: {
           absolute_path: {
             description:
-              "The absolute path to the file to read (e.g., '/home/user/project/file.txt'). Relative paths are not supported. You must provide an absolute path.",
+              "要读取的文件的绝对路径（例如，'/home/user/project/file.txt'）。不支持相对路径。您必须提供绝对路径。",
             type: 'string',
             pattern: '^/',
           },
           offset: {
             description:
-              "Optional: For text files, the 0-based line number to start reading from. Requires 'limit' to be set. Use for paginating through large files.",
+              "可选：对于文本文件，从第几行开始读取（从0开始计数）。需要设置 'limit' 参数。用于分页读取大文件。",
             type: 'number',
           },
           limit: {
             description:
-              "Optional: For text files, maximum number of lines to read. Use with 'offset' to paginate through large files. If omitted, reads the entire file (if feasible, up to a default limit).",
+              "可选：对于文本文件，要读取的最大行数。与 'offset' 一起使用来分页读取大文件。如果省略，则读取整个文件（如果可行，最多到默认限制）。",
             type: 'number',
           },
         },

@@ -66,14 +66,14 @@ export class WebSearchTool extends BaseTool<
   constructor(private readonly config: Config) {
     super(
       WebSearchTool.Name,
-      'GoogleSearch',
-      'Performs a web search using Google Search (via the Gemini API) and returns the results. This tool is useful for finding information on the internet based on a query.',
+      '谷歌搜索',
+      '使用 Google 搜索（通过 Gemini API）执行网络搜索并返回结果。此工具可用于根据查询在互联网上查找信息。',
       {
         type: 'object',
         properties: {
           query: {
             type: 'string',
-            description: 'The search query to find information on the web.',
+            description: '在网络上查找信息的搜索查询。',
           },
         },
         required: ['query'],
@@ -98,7 +98,7 @@ export class WebSearchTool extends BaseTool<
   }
 
   getDescription(params: WebSearchToolParams): string {
-    return `Searching the web for: "${params.query}"`;
+    return `在网络上搜索："${params.query}"`;
   }
 
   async execute(

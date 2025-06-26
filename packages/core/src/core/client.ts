@@ -115,10 +115,10 @@ export class GeminiClient {
       fileService: this.config.getFileService(),
     });
     const context = `
-  Okay, just setting up the context for our chat.
-  Today is ${today}.
-  My operating system is: ${platform}
-  I'm currently working in the directory: ${cwd}
+  好的，现在为我们的对话设置上下文。
+  今天是 ${today}。
+  我的操作系统是：${platform}
+  我当前工作在目录：${cwd}
   ${folderStructure}
           `.trim();
 
@@ -142,7 +142,7 @@ export class GeminiClient {
           );
           if (result.llmContent) {
             initialParts.push({
-              text: `\n--- Full File Context ---\n${result.llmContent}`,
+              text: `\n--- 完整文件上下文 ---\n${result.llmContent}`,
             });
           } else {
             console.warn(
@@ -158,7 +158,7 @@ export class GeminiClient {
         // Not using reportError here as it's a startup/config phase, not a chat/generation phase error.
         console.error('Error reading full file context:', error);
         initialParts.push({
-          text: '\n--- Error reading full file context ---',
+          text: '\n--- 读取完整文件上下文时出错 ---',
         });
       }
     }
@@ -178,7 +178,7 @@ export class GeminiClient {
       },
       {
         role: 'model',
-        parts: [{ text: 'Got it. Thanks for the context!' }],
+        parts: [{ text: '明白了，谢谢你提供的上下文！' }],
       },
     ];
     const history = initialHistory.concat(extraHistory ?? []);
@@ -239,7 +239,7 @@ export class GeminiClient {
         signal,
       );
       if (nextSpeakerCheck?.next_speaker === 'model') {
-        const nextRequest = [{ text: 'Please continue.' }];
+        const nextRequest = [{ text: '请继续。' }];
         // This recursive call's events will be yielded out, but the final
         // turn object will be from the top-level call.
         yield* this.sendMessageStream(nextRequest, signal, turns - 1);
@@ -467,7 +467,7 @@ export class GeminiClient {
     }
 
     const summarizationRequestMessage = {
-      text: 'Summarize our conversation up to this point. The summary should be a concise yet comprehensive overview of all key topics, questions, answers, and important details discussed. This summary will replace the current chat history to conserve tokens, so it must capture everything essential to understand the context and continue our conversation effectively as if no information was lost.',
+      text: '请总结我们到目前为止的对话。摘要应该是一个简明但全面的概述，包含所有关键主题、问题、答案和讨论的重要细节。这个摘要将替换当前的聊天历史以节省token，所以它必须捕获所有必要的信息，以便理解上下文并有效地继续我们的对话，就像没有丢失任何信息一样。',
     };
     const response = await this.getChat().sendMessage({
       message: summarizationRequestMessage,

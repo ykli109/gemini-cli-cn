@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import fs from 'fs';
+import path from 'path';
 import { AuthClient } from 'google-auth-library';
 import {
   LoadCodeAssistResponse,
@@ -131,6 +133,24 @@ export class CodeAssistServer implements ContentGenerator {
     req: object,
     signal?: AbortSignal,
   ): Promise<AsyncGenerator<T>> {
+    // 确保log目录存在
+    const logDir = path.join(process.cwd(), 'log');
+    if (!fs.existsSync(logDir)) {
+      fs.mkdirSync(logDir, { recursive: true });
+    }
+    
+    // 生成日志文件名（使用时间戳）
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const logFileName = `stream-request-${timestamp}.json`;
+    const logFilePath = path.join(logDir, logFileName);
+    
+    // 将请求内容写入日志文件
+    try {
+      fs.writeFileSync(logFilePath, JSON.stringify(req, null, 2), 'utf8');
+      console.log(`Stream request logged to: ${logFilePath}`);
+    } catch (error) {
+      console.error('Failed to write stream request log:', error);
+    }
     const res = await this.auth.request({
       url: `${CODE_ASSIST_ENDPOINT}/${CODE_ASSIST_API_VERSION}:${method}`,
       method: 'POST',

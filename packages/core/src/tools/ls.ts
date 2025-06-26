@@ -77,17 +77,17 @@ export class LSTool extends BaseTool<LSToolParams, ToolResult> {
   ) {
     super(
       LSTool.Name,
-      'ReadFolder',
-      'Lists the names of files and subdirectories directly within a specified directory path. Can optionally ignore entries matching provided glob patterns.',
+      '读取文件夹',
+      '列出指定目录路径下的文件和子目录的名称。可以选择忽略与提供的 glob 模式匹配的条目。',
       {
         properties: {
           path: {
             description:
-              'The absolute path to the directory to list (must be absolute, not relative)',
+              '要列出的目录的绝对路径（必须是绝对路径，不是相对路径）',
             type: 'string',
           },
           ignore: {
-            description: 'List of glob patterns to ignore',
+            description: '要忽略的 glob 模式列表',
             items: {
               type: 'string',
             },
@@ -95,7 +95,7 @@ export class LSTool extends BaseTool<LSToolParams, ToolResult> {
           },
           respect_git_ignore: {
             description:
-              'Optional: Whether to respect .gitignore patterns when listing files. Only available in git repositories. Defaults to true.',
+              '可选：列出文件时是否遵守 .gitignore 模式。仅在 git 仓库中可用。默认为 true。',
             type: 'boolean',
           },
         },
@@ -139,13 +139,13 @@ export class LSTool extends BaseTool<LSToolParams, ToolResult> {
         params,
       )
     ) {
-      return 'Parameters failed schema validation.';
+      return '参数未通过结构验证。';
     }
     if (!path.isAbsolute(params.path)) {
-      return `Path must be absolute: ${params.path}`;
+      return `路径必须是绝对路径：${params.path}`;
     }
     if (!this.isWithinRoot(params.path)) {
-      return `Path must be within the root directory (${this.rootDirectory}): ${params.path}`;
+      return `路径必须在根目录内（${this.rootDirectory}）：${params.path}`;
     }
     return null;
   }

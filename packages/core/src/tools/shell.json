@@ -2,15 +2,15 @@
   "type": "object",
   "properties": {
     "command": {
-      "description": "Exact bash command to execute as `bash -c <command>`",
+      "description": "要作为 `bash -c <command>` 执行的精确 bash 命令",
       "type": "string"
     },
     "description": {
-      "description": "Brief description of the command for the user. Be specific and concise. Ideally a single sentence. Can be up to 3 sentences for clarity. No line breaks.",
+      "description": "命令的简要描述，供用户参考。请具体和简洁。理想情况下为一句话。为了清晰起见，最多可包含三句话。无换行符。",
       "type": "string"
     },
     "directory": {
-      "description": "(OPTIONAL) Directory to run the command in, if not the project root directory. Must be relative to the project root directory and must already exist.",
+      "description": "（可选）运行命令的目录，如果不是项目根目录。必须是相对于项目根目录的路径，并且必须已经存在。",
       "type": "string"
     }
   },
