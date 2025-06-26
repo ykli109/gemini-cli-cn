@@ -55,8 +55,8 @@ export function ThemeDialog({
   );
 
   const scopeItems = [
-    { label: 'User Settings', value: SettingScope.User },
-    { label: 'Workspace Settings', value: SettingScope.Workspace },
+    { label: '用户设置', value: SettingScope.User },
+    { label: '工作区设置', value: SettingScope.Workspace },
   ];
 
   const handleThemeSelect = (themeName: string) => {
@@ -94,8 +94,8 @@ export function ThemeDialog({
   if (settings.forScope(otherScope).settings.theme !== undefined) {
     otherScopeModifiedMessage =
       settings.forScope(selectedScope).settings.theme !== undefined
-        ? `(Also modified in ${otherScope})`
-        : `(Modified in ${otherScope})`;
+        ? `(同时在${otherScope}中修改)`
+        : `(在${otherScope}中修改)`;
   }
 
   // Constants for calculating preview pane layout.
@@ -180,7 +180,7 @@ export function ThemeDialog({
         {/* Left Column: Selection */}
         <Box flexDirection="column" width="45%" paddingRight={2}>
           <Text bold={currenFocusedSection === 'theme'} wrap="truncate">
-            {currenFocusedSection === 'theme' ? '> ' : '  '}Select Theme{' '}
+            {currenFocusedSection === 'theme' ? '> ' : '  '}选择主题{' '}
             <Text color={Colors.Gray}>{otherScopeModifiedMessage}</Text>
           </Text>
           <RadioButtonSelect
@@ -196,7 +196,7 @@ export function ThemeDialog({
           {showScopeSelection && (
             <Box marginTop={1} flexDirection="column">
               <Text bold={currenFocusedSection === 'scope'} wrap="truncate">
-                {currenFocusedSection === 'scope' ? '> ' : '  '}Apply To
+                {currenFocusedSection === 'scope' ? '> ' : '  '}应用到
               </Text>
               <RadioButtonSelect
                 items={scopeItems}
@@ -211,7 +211,7 @@ export function ThemeDialog({
 
         {/* Right Column: Preview */}
         <Box flexDirection="column" width="55%" paddingLeft={2}>
-          <Text bold>Preview</Text>
+          <Text bold>预览</Text>
           <Box
             borderStyle="single"
             borderColor={Colors.Gray}
@@ -249,8 +249,8 @@ export function ThemeDialog({
       </Box>
       <Box marginTop={1}>
         <Text color={Colors.Gray} wrap="truncate">
-          (Use Enter to select
-          {showScopeSelection ? ', Tab to change focus' : ''})
+          (使用 Enter 选择
+          {showScopeSelection ? '，Tab 切换焦点' : ''})
         </Text>
       </Box>
     </Box>

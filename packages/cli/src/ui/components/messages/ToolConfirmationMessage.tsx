@@ -96,29 +96,29 @@ export const ToolConfirmationMessage: React.FC<
           padding={1}
           overflow="hidden"
         >
-          <Text>Modify in progress: </Text>
+          <Text>修改进行中：</Text>
           <Text color={Colors.AccentGreen}>
-            Save and close external editor to continue
+            保存并关闭外部编辑器以继续
           </Text>
         </Box>
       );
     }
 
-    question = `Apply this change?`;
+    question = `应用此更改？`;
     options.push(
       {
-        label: 'Yes, allow once',
+        label: '是，仅允许一次',
         value: ToolConfirmationOutcome.ProceedOnce,
       },
       {
-        label: 'Yes, allow always',
+        label: '是，始终允许',
         value: ToolConfirmationOutcome.ProceedAlways,
       },
       {
-        label: 'Modify with external editor',
+        label: '使用外部编辑器修改',
         value: ToolConfirmationOutcome.ModifyWithEditor,
       },
-      { label: 'No (esc)', value: ToolConfirmationOutcome.Cancel },
+      { label: '否 (esc)', value: ToolConfirmationOutcome.Cancel },
     );
     bodyContent = (
       <DiffRenderer
@@ -132,17 +132,17 @@ export const ToolConfirmationMessage: React.FC<
     const executionProps =
       confirmationDetails as ToolExecuteConfirmationDetails;
 
-    question = `Allow execution?`;
+    question = `允许执行？`;
     options.push(
       {
-        label: 'Yes, allow once',
+        label: '是，仅允许一次',
         value: ToolConfirmationOutcome.ProceedOnce,
       },
       {
-        label: `Yes, allow always "${executionProps.rootCommand} ..."`,
+        label: `是，始终允许 "${executionProps.rootCommand} ..."`,
         value: ToolConfirmationOutcome.ProceedAlways,
       },
-      { label: 'No (esc)', value: ToolConfirmationOutcome.Cancel },
+      { label: '否 (esc)', value: ToolConfirmationOutcome.Cancel },
     );
 
     let bodyContentHeight = availableBodyContentHeight();
@@ -169,17 +169,17 @@ export const ToolConfirmationMessage: React.FC<
       infoProps.urls &&
       !(infoProps.urls.length === 1 && infoProps.urls[0] === infoProps.prompt);
 
-    question = `Do you want to proceed?`;
+    question = `您想要继续吗？`;
     options.push(
       {
-        label: 'Yes, allow once',
+        label: '是，仅允许一次',
         value: ToolConfirmationOutcome.ProceedOnce,
       },
       {
-        label: 'Yes, allow always',
+        label: '是，始终允许',
         value: ToolConfirmationOutcome.ProceedAlways,
       },
-      { label: 'No (esc)', value: ToolConfirmationOutcome.Cancel },
+      { label: '否 (esc)', value: ToolConfirmationOutcome.Cancel },
     );
 
     bodyContent = (
@@ -187,7 +187,7 @@ export const ToolConfirmationMessage: React.FC<
         <Text color={Colors.AccentCyan}>{infoProps.prompt}</Text>
         {displayUrls && infoProps.urls && infoProps.urls.length > 0 && (
           <Box flexDirection="column" marginTop={1}>
-            <Text>URLs to fetch:</Text>
+            <Text>要获取的URL：</Text>
             {infoProps.urls.map((url) => (
               <Text key={url}> - {url}</Text>
             ))}
@@ -201,26 +201,26 @@ export const ToolConfirmationMessage: React.FC<
 
     bodyContent = (
       <Box flexDirection="column" paddingX={1} marginLeft={1}>
-        <Text color={Colors.AccentCyan}>MCP Server: {mcpProps.serverName}</Text>
-        <Text color={Colors.AccentCyan}>Tool: {mcpProps.toolName}</Text>
+        <Text color={Colors.AccentCyan}>MCP 服务器：{mcpProps.serverName}</Text>
+        <Text color={Colors.AccentCyan}>工具：{mcpProps.toolName}</Text>
       </Box>
     );
 
-    question = `Allow execution of MCP tool "${mcpProps.toolName}" from server "${mcpProps.serverName}"?`;
+    question = `允许从服务器 "${mcpProps.serverName}" 执行 MCP 工具 "${mcpProps.toolName}"？`;
     options.push(
       {
-        label: 'Yes, allow once',
+        label: '是，仅允许一次',
         value: ToolConfirmationOutcome.ProceedOnce,
       },
       {
-        label: `Yes, always allow tool "${mcpProps.toolName}" from server "${mcpProps.serverName}"`,
+        label: `是，始终允许来自服务器 "${mcpProps.serverName}" 的工具 "${mcpProps.toolName}"`,
         value: ToolConfirmationOutcome.ProceedAlwaysTool, // Cast until types are updated
       },
       {
-        label: `Yes, always allow all tools from server "${mcpProps.serverName}"`,
+        label: `是，始终允许来自服务器 "${mcpProps.serverName}" 的所有工具`,
         value: ToolConfirmationOutcome.ProceedAlwaysServer,
       },
-      { label: 'No (esc)', value: ToolConfirmationOutcome.Cancel },
+      { label: '否 (esc)', value: ToolConfirmationOutcome.Cancel },
     );
   }
 

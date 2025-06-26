@@ -207,7 +207,7 @@ export class GlobTool extends BaseTool<GlobToolParams, ToolResult> {
     if (validationError) {
       return {
         llmContent: `Error: Invalid parameters provided. Reason: ${validationError}`,
-        returnDisplay: validationError,
+        returnDisplay: `错误：${validationError}`,
       };
     }
 
@@ -263,7 +263,7 @@ export class GlobTool extends BaseTool<GlobToolParams, ToolResult> {
         }
         return {
           llmContent: message,
-          returnDisplay: `No files found`,
+          returnDisplay: `未找到文件`,
         };
       }
 
@@ -292,7 +292,7 @@ export class GlobTool extends BaseTool<GlobToolParams, ToolResult> {
 
       return {
         llmContent: resultMessage,
-        returnDisplay: `Found ${fileCount} matching file(s)`,
+        returnDisplay: `找到 ${fileCount} 个匹配文件`,
       };
     } catch (error) {
       const errorMessage =
@@ -300,7 +300,7 @@ export class GlobTool extends BaseTool<GlobToolParams, ToolResult> {
       console.error(`GlobLogic execute Error: ${errorMessage}`, error);
       return {
         llmContent: `Error during glob search operation: ${errorMessage}`,
-        returnDisplay: `Error: An unexpected error occurred.`,
+        returnDisplay: `错误：发生意外错误。`,
       };
     }
   }

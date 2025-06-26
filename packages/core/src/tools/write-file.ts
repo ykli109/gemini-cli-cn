@@ -213,7 +213,7 @@ export class WriteFileTool
     if (validationError) {
       return {
         llmContent: `Error: Invalid parameters provided. Reason: ${validationError}`,
-        returnDisplay: `Error: ${validationError}`,
+        returnDisplay: `错误：${validationError}`,
       };
     }
 
@@ -225,11 +225,11 @@ export class WriteFileTool
 
     if (correctedContentResult.error) {
       const errDetails = correctedContentResult.error;
-      const errorMsg = `Error checking existing file: ${errDetails.message}`;
-      return {
-        llmContent: `Error checking existing file ${params.file_path}: ${errDetails.message}`,
-        returnDisplay: errorMsg,
-      };
+              const errorMsg = `检查现有文件时出错：${errDetails.message}`;
+        return {
+          llmContent: `Error checking existing file ${params.file_path}: ${errDetails.message}`,
+          returnDisplay: errorMsg,
+        };
     }
 
     const {
@@ -305,7 +305,7 @@ export class WriteFileTool
       const errorMsg = `Error writing to file: ${error instanceof Error ? error.message : String(error)}`;
       return {
         llmContent: `Error writing to file ${params.file_path}: ${errorMsg}`,
-        returnDisplay: `Error: ${errorMsg}`,
+        returnDisplay: `错误：${errorMsg}`,
       };
     }
   }

@@ -132,7 +132,7 @@ export class ReadFileTool extends BaseTool<ReadFileToolParams, ToolResult> {
     if (validationError) {
       return {
         llmContent: `Error: Invalid parameters provided. Reason: ${validationError}`,
-        returnDisplay: validationError,
+        returnDisplay: `错误：${validationError}`,
       };
     }
 

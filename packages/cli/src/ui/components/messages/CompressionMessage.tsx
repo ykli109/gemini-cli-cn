@@ -22,9 +22,9 @@ export const CompressionMessage: React.FC<CompressionDisplayProps> = ({
   compression,
 }) => {
   const text = compression.isPending
-    ? 'Compressing chat history'
-    : `Chat history compressed from ${compression.originalTokenCount ?? 'unknown'}` +
-      ` to ${compression.newTokenCount ?? 'unknown'} tokens.`;
+    ? '正在压缩聊天历史'
+    : `聊天历史已从 ${compression.originalTokenCount ?? '未知'} 个` +
+      ` token 压缩到 ${compression.newTokenCount ?? '未知'} 个 token。`;
 
   return (
     <Box flexDirection="row">

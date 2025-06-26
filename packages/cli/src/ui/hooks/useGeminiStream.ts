@@ -736,7 +736,7 @@ export const useGeminiStream = (
         } catch (error) {
           if (!isNodeError(error) || error.code !== 'EEXIST') {
             onDebugMessage(
-              `Failed to create checkpoint directory: ${getErrorMessage(error)}`,
+              `创建检查点目录失败：${getErrorMessage(error)}`,
             );
             return;
           }
@@ -762,7 +762,7 @@ export const useGeminiStream = (
 
             if (!commitHash) {
               onDebugMessage(
-                `Failed to create snapshot for ${filePath}. Skipping restorable tool call.`,
+                `为 ${filePath} 创建快照失败。跳过可恢复的工具调用。`,
               );
               continue;
             }
@@ -799,7 +799,7 @@ export const useGeminiStream = (
             );
           } catch (error) {
             onDebugMessage(
-              `Failed to write restorable tool call file: ${getErrorMessage(
+              `写入可恢复工具调用文件失败：${getErrorMessage(
                 error,
               )}`,
             );

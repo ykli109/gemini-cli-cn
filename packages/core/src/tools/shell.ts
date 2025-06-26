@@ -134,7 +134,7 @@ export class ShellTool extends BaseTool<ShellToolParams, ToolResult> {
     }
     const confirmationDetails: ToolExecuteConfirmationDetails = {
       type: 'exec',
-      title: 'Confirm Shell Command',
+      title: '确认Shell命令',
       command: params.command,
       rootCommand,
       onConfirm: async (outcome: ToolConfirmationOutcome) => {
@@ -158,14 +158,14 @@ export class ShellTool extends BaseTool<ShellToolParams, ToolResult> {
           `Command rejected: ${params.command}`,
           `Reason: ${validationError}`,
         ].join('\n'),
-        returnDisplay: `Error: ${validationError}`,
+        returnDisplay: `错误：${validationError}`,
       };
     }
 
     if (abortSignal.aborted) {
       return {
         llmContent: 'Command was cancelled by user before it could start.',
-        returnDisplay: 'Command cancelled by user.',
+        returnDisplay: '命令已被用户取消。',
       };
     }
 
@@ -346,14 +346,14 @@ export class ShellTool extends BaseTool<ShellToolParams, ToolResult> {
       } else {
         // Output is empty, let's provide a reason if the command failed or was cancelled
         if (abortSignal.aborted) {
-          returnDisplayMessage = 'Command cancelled by user.';
+          returnDisplayMessage = '命令已被用户取消。';
         } else if (processSignal) {
-          returnDisplayMessage = `Command terminated by signal: ${processSignal}`;
+          returnDisplayMessage = `命令被信号终止：${processSignal}`;
         } else if (error) {
           // If error is not null, it's an Error object (or other truthy value)
-          returnDisplayMessage = `Command failed: ${getErrorMessage(error)}`;
+          returnDisplayMessage = `命令执行失败：${getErrorMessage(error)}`;
         } else if (code !== null && code !== 0) {
-          returnDisplayMessage = `Command exited with code: ${code}`;
+          returnDisplayMessage = `命令退出代码：${code}`;
         }
         // If output is empty and command succeeded (code 0, no error/signal/abort),
         // returnDisplayMessage will remain empty, which is fine.

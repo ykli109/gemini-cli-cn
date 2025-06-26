@@ -1,11 +1,11 @@
 {
-  "name": "@google/gemini-cli",
+  "name": "gemini-cli-cn",
   "version": "0.1.5",
-  "description": "Gemini CLI",
+  "description": "中文版Gemini CLI",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "gemini": "dist/index.js"
+    "gemini-cn": "dist/index.js"
   },
   "scripts": {
     "build": "node ../../scripts/build_package.js",

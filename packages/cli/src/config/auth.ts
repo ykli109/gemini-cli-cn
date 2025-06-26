@@ -15,7 +15,7 @@ export const validateAuthMethod = (authMethod: string): string | null => {
 
   if (authMethod === AuthType.USE_GEMINI) {
     if (!process.env.GEMINI_API_KEY) {
-      return 'GEMINI_API_KEY environment variable not found. Add that to your .env and try again, no reload needed!';
+      return '未找到 GEMINI_API_KEY 环境变量。请将其添加到您的 .env 文件中并重试，无需重新加载！';
     }
     return null;
   }
@@ -26,14 +26,14 @@ export const validateAuthMethod = (authMethod: string): string | null => {
     const hasGoogleApiKey = !!process.env.GOOGLE_API_KEY;
     if (!hasVertexProjectLocationConfig && !hasGoogleApiKey) {
       return (
-        'Must specify GOOGLE_GENAI_USE_VERTEXAI=true and either:\n' +
-        '• GOOGLE_CLOUD_PROJECT and GOOGLE_CLOUD_LOCATION environment variables.\n' +
-        '• GOOGLE_API_KEY environment variable (if using express mode).\n' +
-        'Update your .env and try again, no reload needed!'
+        '必须指定 GOOGLE_GENAI_USE_VERTEXAI=true 以及以下任一选项：\n' +
+        '• GOOGLE_CLOUD_PROJECT 和 GOOGLE_CLOUD_LOCATION 环境变量。\n' +
+        '• GOOGLE_API_KEY 环境变量（如果使用快速模式）。\n' +
+        '请更新您的 .env 文件并重试，无需重新加载！'
       );
     }
     return null;
   }
 
-  return 'Invalid auth method selected.';
+  return '选择的认证方式无效。';
 };

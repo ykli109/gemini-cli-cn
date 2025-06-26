@@ -109,7 +109,7 @@ export class WebSearchTool extends BaseTool<
     if (validationError) {
       return {
         llmContent: `Error: Invalid parameters provided. Reason: ${validationError}`,
-        returnDisplay: validationError,
+        returnDisplay: `错误：${validationError}`,
       };
     }
     const geminiClient = this.config.getGeminiClient();
@@ -133,7 +133,7 @@ export class WebSearchTool extends BaseTool<
       if (!responseText || !responseText.trim()) {
         return {
           llmContent: `No search results or information found for query: "${params.query}"`,
-          returnDisplay: 'No information found.',
+          returnDisplay: '未找到信息。',
         };
       }
 
@@ -180,16 +180,16 @@ export class WebSearchTool extends BaseTool<
 
       return {
         llmContent: `Web search results for "${params.query}":\n\n${modifiedResponseText}`,
-        returnDisplay: `Search results for "${params.query}" returned.`,
+        returnDisplay: `已返回"${params.query}"的搜索结果。`,
         sources,
       };
     } catch (error: unknown) {
       const errorMessage = `Error during web search for query "${params.query}": ${getErrorMessage(error)}`;
       console.error(errorMessage, error);
-      return {
-        llmContent: `Error: ${errorMessage}`,
-        returnDisplay: `Error performing web search.`,
-      };
+              return {
+          llmContent: `Error: ${errorMessage}`,
+          returnDisplay: `网络搜索执行错误。`,
+        };
     }
   }
 }

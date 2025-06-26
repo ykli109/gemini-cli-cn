@@ -33,32 +33,32 @@ export const ContextSummaryDisplay: React.FC<ContextSummaryDisplayProps> = ({
       return '';
     }
     const allNamesTheSame = new Set(contextFileNames).size < 2;
-    const name = allNamesTheSame ? contextFileNames[0] : 'context';
-    return `${geminiMdFileCount} ${name} file${
-      geminiMdFileCount > 1 ? 's' : ''
+    const name = allNamesTheSame ? contextFileNames[0] : '上下文';
+    return `${geminiMdFileCount} 个${name}文件${
+      geminiMdFileCount > 1 ? '' : ''
     }`;
   })();
 
   const mcpText =
     mcpServerCount > 0
-      ? `${mcpServerCount} MCP server${mcpServerCount > 1 ? 's' : ''}`
+      ? `${mcpServerCount} 个MCP服务器${mcpServerCount > 1 ? '' : ''}`
       : '';
 
-  let summaryText = 'Using ';
+  let summaryText = '正在使用 ';
   if (geminiMdText) {
     summaryText += geminiMdText;
   }
   if (geminiMdText && mcpText) {
-    summaryText += ' and ';
+    summaryText += ' 和 ';
   }
   if (mcpText) {
     summaryText += mcpText;
     // Add ctrl+t hint when MCP servers are available
     if (mcpServers && Object.keys(mcpServers).length > 0) {
       if (showToolDescriptions) {
-        summaryText += ' (ctrl+t to toggle)';
+        summaryText += ' (ctrl+t 切换)';
       } else {
-        summaryText += ' (ctrl+t to view)';
+        summaryText += ' (ctrl+t 查看)';
       }
     }
   }

@@ -74,7 +74,7 @@ export const Footer: React.FC<FooterProps> = ({
           </Text>
         ) : (
           <Text color={Colors.AccentRed}>
-            no sandbox <Text color={Colors.Gray}>(see /docs)</Text>
+            无沙盒 <Text color={Colors.Gray}>(参见 /docs)</Text>
           </Text>
         )}
       </Box>
@@ -85,7 +85,7 @@ export const Footer: React.FC<FooterProps> = ({
           {' '}
           {model}{' '}
           <Text color={Colors.Gray}>
-            ({((1 - percentage) * 100).toFixed(0)}% context left)
+            (剩余 {((1 - percentage) * 100).toFixed(0)}% 上下文)
           </Text>
         </Text>
         {corgiMode && (

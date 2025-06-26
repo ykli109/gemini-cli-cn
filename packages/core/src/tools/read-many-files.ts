@@ -249,7 +249,7 @@ Use this tool when the user's query implies needing the content of several files
 
   getDescription(params: ReadManyFilesParams): string {
     const allPatterns = [...params.paths, ...(params.include || [])];
-    const pathDesc = `using patterns: \`${allPatterns.join('`, `')}\` (within target directory: \`${this.targetDir}\`)`;
+    const pathDesc = `使用模式：\`${allPatterns.join('`, `')}\`（目标目录：\`${this.targetDir}\`）`;
 
     // Determine the final list of exclusion patterns exactly as in execute method
     const paramExcludes = params.exclude || [];
@@ -260,7 +260,7 @@ Use this tool when the user's query implies needing the content of several files
         ? [...DEFAULT_EXCLUDES, ...paramExcludes, ...this.geminiIgnorePatterns]
         : [...paramExcludes, ...this.geminiIgnorePatterns];
 
-    let excludeDesc = `Excluding: ${finalExclusionPatternsForDescription.length > 0 ? `patterns like \`${finalExclusionPatternsForDescription.slice(0, 2).join('`, `')}${finalExclusionPatternsForDescription.length > 2 ? '...`' : '`'}` : 'none specified'}`;
+    let excludeDesc = `排除规则：${finalExclusionPatternsForDescription.length > 0 ? `如 \`${finalExclusionPatternsForDescription.slice(0, 2).join('`, `')}${finalExclusionPatternsForDescription.length > 2 ? '...`' : '`'} 等模式` : '无特定规则'}`;
 
     // Add a note if .geminiignore patterns contributed to the final list of exclusions
     if (this.geminiIgnorePatterns.length > 0) {
@@ -268,11 +268,11 @@ Use this tool when the user's query implies needing the content of several files
         finalExclusionPatternsForDescription.includes(p),
       ).length;
       if (geminiPatternsInEffect > 0) {
-        excludeDesc += ` (includes ${geminiPatternsInEffect} from .geminiignore)`;
+        excludeDesc += `（包含 ${geminiPatternsInEffect} 个来自 .geminiignore 的规则）`;
       }
     }
 
-    return `Will attempt to read and concatenate files ${pathDesc}. ${excludeDesc}. File encoding: ${DEFAULT_ENCODING}. Separator: "${DEFAULT_OUTPUT_SEPARATOR_FORMAT.replace('{filePath}', 'path/to/file.ext')}".`;
+    return `将尝试读取并合并文件 ${pathDesc}。${excludeDesc}。文件编码：${DEFAULT_ENCODING}。分隔符："${DEFAULT_OUTPUT_SEPARATOR_FORMAT.replace('{filePath}', 'path/to/file.ext')}"。`;
   }
 
   async execute(
@@ -283,7 +283,7 @@ Use this tool when the user's query implies needing the content of several files
     if (validationError) {
       return {
         llmContent: `Error: Invalid parameters for ${this.displayName}. Reason: ${validationError}`,
-        returnDisplay: `## Parameter Error\n\n${validationError}`,
+        returnDisplay: `## 参数错误\n\n${validationError}`,
       };
     }
 
@@ -315,7 +315,7 @@ Use this tool when the user's query implies needing the content of several files
     if (searchPatterns.length === 0) {
       return {
         llmContent: 'No search paths or include patterns provided.',
-        returnDisplay: `## Information\n\nNo search paths or include patterns were specified. Nothing to read or concatenate.`,
+        returnDisplay: `## 提示信息\n\n未指定搜索路径或包含模式，没有需要读取或合并的内容。`,
       };
     }
 
@@ -347,7 +347,7 @@ Use this tool when the user's query implies needing the content of several files
         if (!absoluteFilePath.startsWith(toolBaseDir)) {
           skippedFiles.push({
             path: absoluteFilePath,
-            reason: `Security: Glob library returned path outside target directory. Base: ${toolBaseDir}, Path: ${absoluteFilePath}`,
+            reason: `安全检查：Glob 库返回的路径超出目标目录范围。基础目录：${toolBaseDir}，文件路径：${absoluteFilePath}`,
           });
           continue;
         }
@@ -364,14 +364,14 @@ Use this tool when the user's query implies needing the content of several files
       // Add info about git-ignored files if any were filtered
       if (gitIgnoredCount > 0) {
         skippedFiles.push({
-          path: `${gitIgnoredCount} file(s)`,
-          reason: 'ignored',
+          path: `${gitIgnoredCount} 个文件`,
+          reason: '被git忽略',
         });
       }
     } catch (error) {
       return {
         llmContent: `Error during file search: ${getErrorMessage(error)}`,
-        returnDisplay: `## File Search Error\n\nAn error occurred while searching for files:\n\`\`\`\n${getErrorMessage(error)}\n\`\`\``,
+        returnDisplay: `## 文件搜索错误\n\n搜索文件时发生错误：\n\`\`\`\n${getErrorMessage(error)}\n\`\`\``,
       };
     }
 
@@ -394,11 +394,11 @@ Use this tool when the user's query implies needing the content of several files
         );
 
         if (!requestedExplicitly) {
-          skippedFiles.push({
-            path: relativePathForDisplay,
-            reason:
-              'asset file (image/pdf) was not explicitly requested by name or extension',
-          });
+                  skippedFiles.push({
+          path: relativePathForDisplay,
+          reason:
+            '资源文件（图片/PDF）未被明确按名称或扩展名请求',
+        });
           continue;
         }
       }
@@ -412,7 +412,7 @@ Use this tool when the user's query implies needing the content of several files
       if (fileReadResult.error) {
         skippedFiles.push({
           path: relativePathForDisplay,
-          reason: `Read error: ${fileReadResult.error}`,
+          reason: `读取错误：${fileReadResult.error}`,
         });
       } else {
         if (typeof fileReadResult.llmContent === 'string') {
@@ -440,45 +440,45 @@ Use this tool when the user's query implies needing the content of several files
       }
     }
 
-    let displayMessage = `### ReadManyFiles Result (Target Dir: \`${this.targetDir}\`)\n\n`;
+    let displayMessage = `### 批量读取文件结果（目标目录：\`${this.targetDir}\`）\n\n`;
     if (processedFilesRelativePaths.length > 0) {
-      displayMessage += `Successfully read and concatenated content from **${processedFilesRelativePaths.length} file(s)**.\n`;
+      displayMessage += `成功读取并合并了 **${processedFilesRelativePaths.length} 个文件** 的内容。\n`;
       if (processedFilesRelativePaths.length <= 10) {
-        displayMessage += `\n**Processed Files:**\n`;
+        displayMessage += `\n**已处理的文件：**\n`;
         processedFilesRelativePaths.forEach(
           (p) => (displayMessage += `- \`${p}\`\n`),
         );
       } else {
-        displayMessage += `\n**Processed Files (first 10 shown):**\n`;
+        displayMessage += `\n**已处理的文件（显示前10个）：**\n`;
         processedFilesRelativePaths
           .slice(0, 10)
           .forEach((p) => (displayMessage += `- \`${p}\`\n`));
-        displayMessage += `- ...and ${processedFilesRelativePaths.length - 10} more.\n`;
+        displayMessage += `- ...还有 ${processedFilesRelativePaths.length - 10} 个文件。\n`;
       }
     }
 
     if (skippedFiles.length > 0) {
       if (processedFilesRelativePaths.length === 0) {
-        displayMessage += `No files were read and concatenated based on the criteria.\n`;
+        displayMessage += `根据指定条件，没有文件被读取和合并。\n`;
       }
       if (skippedFiles.length <= 5) {
-        displayMessage += `\n**Skipped ${skippedFiles.length} item(s):**\n`;
+        displayMessage += `\n**跳过了 ${skippedFiles.length} 个项目：**\n`;
       } else {
-        displayMessage += `\n**Skipped ${skippedFiles.length} item(s) (first 5 shown):**\n`;
+        displayMessage += `\n**跳过了 ${skippedFiles.length} 个项目（显示前5个）：**\n`;
       }
       skippedFiles
         .slice(0, 5)
         .forEach(
-          (f) => (displayMessage += `- \`${f.path}\` (Reason: ${f.reason})\n`),
+          (f) => (displayMessage += `- \`${f.path}\`（原因：${f.reason}）\n`),
         );
       if (skippedFiles.length > 5) {
-        displayMessage += `- ...and ${skippedFiles.length - 5} more.\n`;
+        displayMessage += `- ...还有 ${skippedFiles.length - 5} 个项目。\n`;
       }
     } else if (
       processedFilesRelativePaths.length === 0 &&
       skippedFiles.length === 0
     ) {
-      displayMessage += `No files were read and concatenated based on the criteria.\n`;
+      displayMessage += `根据指定条件，没有文件被读取和合并。\n`;
     }
 
     if (contentParts.length === 0) {

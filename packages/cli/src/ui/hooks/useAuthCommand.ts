@@ -15,7 +15,7 @@ import {
 
 async function performAuthFlow(authMethod: AuthType, config: Config) {
   await config.refreshAuth(authMethod);
-  console.log(`Authenticated via "${authMethod}".`);
+  console.log(`通过 "${authMethod}" 认证成功。`);
 }
 
 export const useAuthCommand = (
@@ -46,15 +46,15 @@ export const useAuthCommand = (
           config,
         );
       } catch (e) {
-        let errorMessage = `Failed to login.\nMessage: ${getErrorMessage(e)}`;
+        let errorMessage = `登录失败。\n消息：${getErrorMessage(e)}`;
         if (
           settings.merged.selectedAuthType ===
             AuthType.LOGIN_WITH_GOOGLE_PERSONAL &&
           !process.env.GOOGLE_CLOUD_PROJECT
         ) {
           errorMessage =
-            'Failed to login. Workspace accounts and licensed Code Assist users must configure' +
-            ` GOOGLE_CLOUD_PROJECT (see https://goo.gle/gemini-cli-auth-docs#workspace-gca).\nMessage: ${getErrorMessage(e)}`;
+            '登录失败。工作区账户和授权的代码辅助用户必须配置' +
+            ` GOOGLE_CLOUD_PROJECT（参见 https://goo.gle/gemini-cli-auth-docs#workspace-gca）。\n消息：${getErrorMessage(e)}`;
         }
         setAuthError(errorMessage);
         openAuthDialog();

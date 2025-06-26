@@ -188,7 +188,7 @@ export class MemoryTool extends BaseTool<SaveMemoryParams, ToolResult> {
       const errorMessage = 'Parameter "fact" must be a non-empty string.';
       return {
         llmContent: JSON.stringify({ success: false, error: errorMessage }),
-        returnDisplay: `Error: ${errorMessage}`,
+        returnDisplay: `错误：${errorMessage}`,
       };
     }
 
@@ -215,7 +215,7 @@ export class MemoryTool extends BaseTool<SaveMemoryParams, ToolResult> {
           success: false,
           error: `Failed to save memory. Detail: ${errorMessage}`,
         }),
-        returnDisplay: `Error saving memory: ${errorMessage}`,
+        returnDisplay: `保存记忆时出错：${errorMessage}`,
       };
     }
   }

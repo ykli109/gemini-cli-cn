@@ -11,8 +11,8 @@ import { Colors } from '../colors.js';
 export const ShellModeIndicator: React.FC = () => (
   <Box>
     <Text color={Colors.AccentYellow}>
-      shell mode enabled
-      <Text color={Colors.Gray}> (esc to disable)</Text>
+      shell 模式已启用
+      <Text color={Colors.Gray}> (esc 禁用)</Text>
     </Text>
   </Box>
 );

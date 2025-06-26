@@ -78,7 +78,7 @@ export async function runNonInteractive(
 
       for await (const resp of responseStream) {
         if (abortController.signal.aborted) {
-          console.error('Operation cancelled.');
+          console.error('操作已取消。');
           return;
         }
         const textPart = getResponseText(resp);
@@ -111,7 +111,7 @@ export async function runNonInteractive(
 
           if (toolResponse.error) {
             console.error(
-              `Error executing tool ${fc.name}: ${toolResponse.resultDisplay || toolResponse.error.message}`,
+              `执行工具 ${fc.name} 时出错：${toolResponse.resultDisplay || toolResponse.error.message}`,
             );
             process.exit(1);
           }

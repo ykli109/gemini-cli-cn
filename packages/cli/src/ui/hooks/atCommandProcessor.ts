@@ -149,7 +149,7 @@ export async function handleAtCommand({
 
   if (!readManyFilesTool) {
     addItem(
-      { type: 'error', text: 'Error: read_many_files tool not found.' },
+              { type: 'error', text: '错误：未找到 read_many_files 工具。' },
       userMessageTimestamp,
     );
     return { processedQuery: null, shouldProceed: false };
@@ -172,7 +172,7 @@ export async function handleAtCommand({
       addItem(
         {
           type: 'error',
-          text: `Error: Invalid @ command '${originalAtPath}'. No path specified.`,
+          text: `错误：无效的 @ 命令 '${originalAtPath}'。未指定路径。`,
         },
         userMessageTimestamp,
       );
@@ -362,7 +362,7 @@ export async function handleAtCommand({
       status: ToolCallStatus.Success,
       resultDisplay:
         result.returnDisplay ||
-        `Successfully read: ${contentLabelsForDisplay.join(', ')}`,
+        `成功读取：${contentLabelsForDisplay.join('、')}`,
       confirmationDetails: undefined,
     };
 

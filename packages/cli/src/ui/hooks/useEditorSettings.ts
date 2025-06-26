@@ -56,7 +56,7 @@ export const useEditorSettings = (
         setEditorError(null);
         setIsEditorDialogOpen(false);
       } catch (error) {
-        setEditorError(`Failed to set editor preference: ${error}`);
+        setEditorError(`设置编辑器偏好失败：${error}`);
       }
     },
     [loadedSettings, setEditorError, addItem],

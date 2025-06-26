@@ -189,7 +189,7 @@ export class LSTool extends BaseTool<LSToolParams, ToolResult> {
     return {
       llmContent,
       // Keep returnDisplay simpler in core logic
-      returnDisplay: `Error: ${returnDisplay}`,
+      returnDisplay: `错误：${returnDisplay}`,
     };
   }
 
@@ -206,7 +206,7 @@ export class LSTool extends BaseTool<LSToolParams, ToolResult> {
     if (validationError) {
       return this.errorResult(
         `Error: Invalid parameters provided. Reason: ${validationError}`,
-        `Failed to execute tool.`,
+        `工具执行失败。`,
       );
     }
 
@@ -217,13 +217,13 @@ export class LSTool extends BaseTool<LSToolParams, ToolResult> {
         // but keeping for clarity. Error message adjusted.
         return this.errorResult(
           `Error: Directory not found or inaccessible: ${params.path}`,
-          `Directory not found or inaccessible.`,
+          `目录未找到或无法访问。`,
         );
       }
       if (!stats.isDirectory()) {
         return this.errorResult(
           `Error: Path is not a directory: ${params.path}`,
-          `Path is not a directory.`,
+          `路径不是目录。`,
         );
       }
 
@@ -242,7 +242,7 @@ export class LSTool extends BaseTool<LSToolParams, ToolResult> {
         // Changed error message to be more neutral for LLM
         return {
           llmContent: `Directory ${params.path} is empty.`,
-          returnDisplay: `Directory is empty.`,
+          returnDisplay: `目录为空。`,
         };
       }
 
@@ -296,9 +296,9 @@ export class LSTool extends BaseTool<LSToolParams, ToolResult> {
         resultMessage += `\n\n(${gitIgnoredCount} items were git-ignored)`;
       }
 
-      let displayMessage = `Listed ${entries.length} item(s).`;
+      let displayMessage = `已列出 ${entries.length} 个项目。`;
       if (gitIgnoredCount > 0) {
-        displayMessage += ` (${gitIgnoredCount} git-ignored)`;
+        displayMessage += `（${gitIgnoredCount} 个被git忽略）`;
       }
 
       return {
@@ -307,7 +307,7 @@ export class LSTool extends BaseTool<LSToolParams, ToolResult> {
       };
     } catch (error) {
       const errorMsg = `Error listing directory: ${error instanceof Error ? error.message : String(error)}`;
-      return this.errorResult(errorMsg, 'Failed to list directory.');
+      return this.errorResult(errorMsg, '目录列表获取失败。');
     }
   }
 }

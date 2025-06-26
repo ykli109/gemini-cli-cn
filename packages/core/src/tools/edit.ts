@@ -222,10 +222,10 @@ Expectation for required parameters:
       isNewFile = true;
     } else if (!fileExists) {
       // Trying to edit a non-existent file (and old_string is not empty)
-      error = {
-        display: `File not found. Cannot apply edit. Use an empty old_string to create a new file.`,
-        raw: `File not found: ${params.file_path}`,
-      };
+              error = {
+          display: `文件未找到。无法应用编辑。使用空的 old_string 创建新文件。`,
+          raw: `File not found: ${params.file_path}`,
+        };
     } else if (currentContent !== null) {
       // Editing an existing file
       const correctedEdit = await ensureCorrectEdit(
@@ -241,24 +241,24 @@ Expectation for required parameters:
       if (params.old_string === '') {
         // Error: Trying to create a file that already exists
         error = {
-          display: `Failed to edit. Attempted to create a file that already exists.`,
+          display: `编辑失败。尝试创建已存在的文件。`,
           raw: `File already exists, cannot create: ${params.file_path}`,
         };
       } else if (occurrences === 0) {
         error = {
-          display: `Failed to edit, could not find the string to replace.`,
+          display: `编辑失败，找不到要替换的字符串。`,
           raw: `Failed to edit, 0 occurrences found for old_string in ${params.file_path}. No edits made. The exact text in old_string was not found. Ensure you're not escaping content incorrectly and check whitespace, indentation, and context. Use ${ReadFileTool.Name} tool to verify.`,
         };
       } else if (occurrences !== expectedReplacements) {
         error = {
-          display: `Failed to edit, expected ${expectedReplacements} occurrence(s) but found ${occurrences}.`,
+          display: `编辑失败，期望 ${expectedReplacements} 次匹配但找到 ${occurrences} 次。`,
           raw: `Failed to edit, Expected ${expectedReplacements} occurrences but found ${occurrences} for old_string in file: ${params.file_path}`,
         };
       }
     } else {
       // Should not happen if fileExists and no exception was thrown, but defensively:
       error = {
-        display: `Failed to read content of file.`,
+        display: `读取文件内容失败。`,
         raw: `Failed to read content of existing file: ${params.file_path}`,
       };
     }
@@ -323,7 +323,7 @@ Expectation for required parameters:
     );
     const confirmationDetails: ToolEditConfirmationDetails = {
       type: 'edit',
-      title: `Confirm Edit: ${shortenPath(makeRelative(params.file_path, this.rootDirectory))}`,
+      title: `确认编辑：${shortenPath(makeRelative(params.file_path, this.rootDirectory))}`,
       fileName,
       fileDiff,
       onConfirm: async (outcome: ToolConfirmationOutcome) => {
@@ -337,11 +337,11 @@ Expectation for required parameters:
 
   getDescription(params: EditToolParams): string {
     if (!params.file_path || !params.old_string || !params.new_string) {
-      return `Model did not provide valid parameters for edit tool`;
+      return `模型未提供编辑工具的有效参数`;
     }
     const relativePath = makeRelative(params.file_path, this.rootDirectory);
     if (params.old_string === '') {
-      return `Create ${shortenPath(relativePath)}`;
+      return `创建 ${shortenPath(relativePath)}`;
     }
 
     const oldStringSnippet =
@@ -352,9 +352,9 @@ Expectation for required parameters:
       (params.new_string.length > 30 ? '...' : '');
 
     if (params.old_string === params.new_string) {
-      return `No file changes to ${shortenPath(relativePath)}`;
+      return `${shortenPath(relativePath)} 无文件更改`;
     }
-    return `${shortenPath(relativePath)}: ${oldStringSnippet} => ${newStringSnippet}`;
+    return `${shortenPath(relativePath)}：${oldStringSnippet} => ${newStringSnippet}`;
   }
 
   /**
@@ -370,7 +370,7 @@ Expectation for required parameters:
     if (validationError) {
       return {
         llmContent: `Error: Invalid parameters provided. Reason: ${validationError}`,
-        returnDisplay: `Error: ${validationError}`,
+        returnDisplay: `错误：${validationError}`,
       };
     }
 
@@ -381,14 +381,14 @@ Expectation for required parameters:
       const errorMsg = error instanceof Error ? error.message : String(error);
       return {
         llmContent: `Error preparing edit: ${errorMsg}`,
-        returnDisplay: `Error preparing edit: ${errorMsg}`,
+        returnDisplay: `编辑准备错误：${errorMsg}`,
       };
     }
 
     if (editData.error) {
       return {
         llmContent: editData.error.raw,
-        returnDisplay: `Error: ${editData.error.display}`,
+        returnDisplay: `错误：${editData.error.display}`,
       };
     }
 
@@ -398,7 +398,7 @@ Expectation for required parameters:
 
       let displayResult: ToolResultDisplay;
       if (editData.isNewFile) {
-        displayResult = `Created ${shortenPath(makeRelative(params.file_path, this.rootDirectory))}`;
+        displayResult = `已创建 ${shortenPath(makeRelative(params.file_path, this.rootDirectory))}`;
       } else {
         // Generate diff for display, even though core logic doesn't technically need it
         // The CLI wrapper will use this part of the ToolResult
@@ -426,7 +426,7 @@ Expectation for required parameters:
       const errorMsg = error instanceof Error ? error.message : String(error);
       return {
         llmContent: `Error executing edit: ${errorMsg}`,
-        returnDisplay: `Error writing file: ${errorMsg}`,
+        returnDisplay: `文件写入错误：${errorMsg}`,
       };
     }
   }

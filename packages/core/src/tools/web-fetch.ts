@@ -91,7 +91,7 @@ export class WebFetchTool extends BaseTool<WebFetchToolParams, ToolResult> {
     if (urls.length === 0) {
       return {
         llmContent: 'Error: No URL found in the prompt for fallback.',
-        returnDisplay: 'Error: No URL found in the prompt for fallback.',
+        returnDisplay: '错误：在回退提示中未找到URL。',
       };
     }
     // For now, we only support one URL for fallback
@@ -136,15 +136,15 @@ ${textContent}
       const resultText = getResponseText(result) || '';
       return {
         llmContent: resultText,
-        returnDisplay: `Content for ${url} processed using fallback fetch.`,
+        returnDisplay: `已使用回退获取处理 ${url} 的内容。`,
       };
     } catch (e) {
       const error = e as Error;
-      const errorMessage = `Error during fallback fetch for ${url}: ${error.message}`;
-      return {
-        llmContent: `Error: ${errorMessage}`,
-        returnDisplay: `Error: ${errorMessage}`,
-      };
+              const errorMessage = `Error during fallback fetch for ${url}: ${error.message}`;
+        return {
+          llmContent: `Error: ${errorMessage}`,
+          returnDisplay: `错误：${errorMessage}`,
+        };
     }
   }
 
@@ -223,7 +223,7 @@ ${textContent}
     if (validationError) {
       return {
         llmContent: `Error: Invalid parameters provided. Reason: ${validationError}`,
-        returnDisplay: validationError,
+        returnDisplay: `错误：${validationError}`,
       };
     }
 
@@ -343,18 +343,18 @@ ${sourceListFormatted.join('\n')}`;
 
       return {
         llmContent,
-        returnDisplay: `Content processed from prompt.`,
+        returnDisplay: `已处理来自提示的内容。`,
       };
     } catch (error: unknown) {
       const errorMessage = `Error processing web content for prompt "${userPrompt.substring(
         0,
         50,
       )}...": ${getErrorMessage(error)}`;
-      console.error(errorMessage, error);
-      return {
-        llmContent: `Error: ${errorMessage}`,
-        returnDisplay: `Error: ${errorMessage}`,
-      };
+              console.error(errorMessage, error);
+        return {
+          llmContent: `Error: ${errorMessage}`,
+          returnDisplay: `错误：${errorMessage}`,
+        };
     }
   }
 }

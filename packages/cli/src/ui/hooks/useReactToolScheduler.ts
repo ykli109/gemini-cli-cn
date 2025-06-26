@@ -198,7 +198,7 @@ function mapCoreStatusToDisplayStatus(coreStatus: CoreStatus): ToolCallStatus {
       return ToolCallStatus.Pending;
     default: {
       const exhaustiveCheck: never = coreStatus;
-      console.warn(`Unknown core status encountered: ${exhaustiveCheck}`);
+      console.warn(`遇到未知的核心状态：${exhaustiveCheck}`);
       return ToolCallStatus.Error;
     }
   }

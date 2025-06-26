@@ -183,7 +183,7 @@ export async function processSingleFileContent(
       // Sync check is acceptable before async read
       return {
         llmContent: '',
-        returnDisplay: 'File not found.',
+        returnDisplay: '文件未找到。',
         error: `File not found: ${filePath}`,
       };
     }
@@ -191,7 +191,7 @@ export async function processSingleFileContent(
     if (stats.isDirectory()) {
       return {
         llmContent: '',
-        returnDisplay: 'Path is a directory.',
+        returnDisplay: '路径是目录。',
         error: `Path is a directory, not a file: ${filePath}`,
       };
     }
@@ -205,7 +205,7 @@ export async function processSingleFileContent(
       case 'binary': {
         return {
           llmContent: `Cannot display content of binary file: ${relativePathForDisplay}`,
-          returnDisplay: `Skipped binary file: ${relativePathForDisplay}`,
+          returnDisplay: `已跳过二进制文件：${relativePathForDisplay}`,
         };
       }
       case 'text': {
@@ -246,7 +246,7 @@ export async function processSingleFileContent(
 
         return {
           llmContent: llmTextContent,
-          returnDisplay: isTruncated ? '(truncated)' : '',
+          returnDisplay: isTruncated ? '（已截断）' : '',
           isTruncated,
           originalLineCount,
           linesShown: [actualStartLine + 1, endLine],
@@ -263,7 +263,7 @@ export async function processSingleFileContent(
               mimeType: mime.lookup(filePath) || 'application/octet-stream',
             },
           },
-          returnDisplay: `Read ${fileType} file: ${relativePathForDisplay}`,
+          returnDisplay: `已读取${fileType === 'image' ? '图片' : 'PDF'}文件：${relativePathForDisplay}`,
         };
       }
       default: {
@@ -271,7 +271,7 @@ export async function processSingleFileContent(
         const exhaustiveCheck: never = fileType;
         return {
           llmContent: `Unhandled file type: ${exhaustiveCheck}`,
-          returnDisplay: `Skipped unhandled file type: ${relativePathForDisplay}`,
+          returnDisplay: `已跳过未处理的文件类型：${relativePathForDisplay}`,
           error: `Unhandled file type for ${filePath}`,
         };
       }
@@ -283,7 +283,7 @@ export async function processSingleFileContent(
       .replace(/\\/g, '/');
     return {
       llmContent: `Error reading file ${displayPath}: ${errorMessage}`,
-      returnDisplay: `Error reading file ${displayPath}: ${errorMessage}`,
+      returnDisplay: `读取文件错误 ${displayPath}：${errorMessage}`,
       error: `Error reading file ${filePath}: ${errorMessage}`,
     };
   }

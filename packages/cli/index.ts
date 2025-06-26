@@ -11,7 +11,7 @@ import { main } from './src/gemini.js';
 
 // --- Global Entry Point ---
 main().catch((error) => {
-  console.error('An unexpected critical error occurred:');
+  console.error('发生了意外的严重错误：');
   if (error instanceof Error) {
     console.error(error.stack);
   } else {

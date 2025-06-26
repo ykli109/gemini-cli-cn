@@ -25,12 +25,12 @@ export async function checkForUpdates(): Promise<string | null> {
     });
 
     if (notifier.update) {
-      return `Gemini CLI update available! ${notifier.update.current} → ${notifier.update.latest}\nRun npm install -g ${packageJson.name} to update`;
+      return `Gemini CLI 有可用更新！${notifier.update.current} → ${notifier.update.latest}\n运行 npm install -g ${packageJson.name} 进行更新`;
     }
 
     return null;
   } catch (e) {
-    console.warn('Failed to check for updates: ' + e);
+    console.warn('检查更新失败：' + e);
     return null;
   }
 }

@@ -175,7 +175,7 @@ export class GrepTool extends BaseTool<GrepToolParams, ToolResult> {
     if (validationError) {
       return {
         llmContent: `Error: Invalid parameters provided. Reason: ${validationError}`,
-        returnDisplay: `Model provided invalid parameters. Error: ${validationError}`,
+        returnDisplay: `错误：模型提供了无效参数。${validationError}`,
       };
     }
 
@@ -193,7 +193,7 @@ export class GrepTool extends BaseTool<GrepToolParams, ToolResult> {
 
       if (matches.length === 0) {
         const noMatchMsg = `No matches found for pattern "${params.pattern}" in path "${searchDirDisplay}"${params.include ? ` (filter: "${params.include}")` : ''}.`;
-        return { llmContent: noMatchMsg, returnDisplay: `No matches found` };
+        return { llmContent: noMatchMsg, returnDisplay: `未找到匹配项` };
       }
 
       const matchesByFile = matches.reduce(
@@ -226,14 +226,14 @@ export class GrepTool extends BaseTool<GrepToolParams, ToolResult> {
 
       return {
         llmContent: llmContent.trim(),
-        returnDisplay: `Found ${matches.length} matche(s)`,
+        returnDisplay: `找到 ${matches.length} 个匹配项`,
       };
     } catch (error) {
       console.error(`Error during GrepLogic execution: ${error}`);
       const errorMessage = getErrorMessage(error);
       return {
         llmContent: `Error during grep search operation: ${errorMessage}`,
-        returnDisplay: `Error: ${errorMessage}`,
+        returnDisplay: `错误：${errorMessage}`,
       };
     }
   }

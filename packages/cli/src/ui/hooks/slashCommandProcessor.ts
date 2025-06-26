@@ -158,7 +158,7 @@ export const useSlashCommandProcessor = (
       // UI feedback for attempting to schedule
       addMessage({
         type: MessageType.INFO,
-        content: `Attempting to save to memory: "${args.trim()}"`,
+        content: `尝试保存到内存："${args.trim()}"`,
         timestamp: new Date(),
       });
       // Return info for scheduling the tool call
@@ -193,15 +193,15 @@ export const useSlashCommandProcessor = (
       {
         name: 'help',
         altName: '?',
-        description: 'for help on gemini-cli',
+        description: '获取 gemini-cli 帮助',
         action: (_mainCommand, _subCommand, _args) => {
-          onDebugMessage('Opening help.');
+          onDebugMessage('打开帮助。');
           setShowHelp(true);
         },
       },
       {
         name: 'docs',
-        description: 'open full Gemini CLI documentation in your browser',
+        description: '在浏览器中打开完整的 Gemini CLI 文档',
         action: async (_mainCommand, _subCommand, _args) => {
           const docsUrl = 'https://goo.gle/gemini-cli-docs';
           if (process.env.SANDBOX && process.env.SANDBOX !== 'sandbox-exec') {
@@ -222,9 +222,9 @@ export const useSlashCommandProcessor = (
       },
       {
         name: 'clear',
-        description: 'clear the screen and conversation history',
+        description: '清除屏幕和对话历史',
         action: async (_mainCommand, _subCommand, _args) => {
-          onDebugMessage('Clearing terminal and resetting chat.');
+          onDebugMessage('清除终端并重置聊天。');
           clearItems();
           await config?.getGeminiClient()?.resetChat();
           console.clear();
@@ -233,21 +233,21 @@ export const useSlashCommandProcessor = (
       },
       {
         name: 'theme',
-        description: 'change the theme',
+        description: '更改主题',
         action: (_mainCommand, _subCommand, _args) => {
           openThemeDialog();
         },
       },
       {
         name: 'auth',
-        description: 'change the auth method',
+        description: '更改认证方式',
         action: (_mainCommand, _subCommand, _args) => {
           openAuthDialog();
         },
       },
       {
         name: 'editor',
-        description: 'set external editor preference',
+        description: '设置外部编辑器偏好',
         action: (_mainCommand, _subCommand, _args) => {
           openEditorDialog();
         },
@@ -255,7 +255,7 @@ export const useSlashCommandProcessor = (
       {
         name: 'stats',
         altName: 'usage',
-        description: 'check session stats',
+        description: '查看会话统计',
         action: (_mainCommand, _subCommand, _args) => {
           const now = new Date();
           const { sessionStartTime, cumulative, currentTurn } = session.stats;
@@ -272,7 +272,7 @@ export const useSlashCommandProcessor = (
       },
       {
         name: 'mcp',
-        description: 'list configured MCP servers and tools',
+        description: '列出已配置的 MCP 服务器和工具',
         action: async (_mainCommand, _subCommand, _args) => {
           // Check if the _subCommand includes a specific flag to control description visibility
           let useShowDescriptions = showToolDescriptions;
@@ -472,7 +472,7 @@ export const useSlashCommandProcessor = (
       {
         name: 'memory',
         description:
-          'manage memory. Usage: /memory <show|refresh|add> [text for add]',
+          '管理内存。用法：/memory <show|refresh|add> [添加的文本]',
         action: (mainCommand, subCommand, args) => {
           switch (subCommand) {
             case 'show':
@@ -495,7 +495,7 @@ export const useSlashCommandProcessor = (
       },
       {
         name: 'tools',
-        description: 'list available Gemini CLI tools',
+        description: '列出可用的 Gemini CLI 工具',
         action: async (_mainCommand, _subCommand, _args) => {
           // Check if the _subCommand includes a specific flag to control description visibility
           let useShowDescriptions = showToolDescriptions;
@@ -575,7 +575,7 @@ export const useSlashCommandProcessor = (
       },
       {
         name: 'about',
-        description: 'show version info',
+        description: '显示版本信息',
         action: async (_mainCommand, _subCommand, _args) => {
           const osVersion = process.platform;
           let sandboxEnv = 'no sandbox';
@@ -600,7 +600,7 @@ export const useSlashCommandProcessor = (
       },
       {
         name: 'bug',
-        description: 'submit a bug report',
+        description: '提交错误报告',
         action: async (_mainCommand, _subCommand, args) => {
           let bugDescription = _subCommand || '';
           if (args) {
@@ -663,7 +663,7 @@ export const useSlashCommandProcessor = (
       {
         name: 'chat',
         description:
-          'Manage conversation history. Usage: /chat <list|save|resume> [tag]',
+          '管理对话历史。用法：/chat <list|save|resume> [标签]',
         action: async (_mainCommand, subCommand, args) => {
           const tag = (args || '').trim();
           const logger = new Logger(config?.getSessionId() || '');
@@ -771,7 +771,7 @@ export const useSlashCommandProcessor = (
       {
         name: 'quit',
         altName: 'exit',
-        description: 'exit the cli',
+        description: '退出 CLI',
         action: async (mainCommand, _subCommand, _args) => {
           const now = new Date();
           const { sessionStartTime, cumulative } = session.stats;
@@ -799,7 +799,7 @@ export const useSlashCommandProcessor = (
       {
         name: 'compress',
         altName: 'summarize',
-        description: 'Compresses the context by replacing it with a summary.',
+        description: '通过用摘要替换上下文来压缩内容。',
         action: async (_mainCommand, _subCommand, _args) => {
           if (pendingCompressionItemRef.current !== null) {
             addMessage({
@@ -835,14 +835,14 @@ export const useSlashCommandProcessor = (
             } else {
               addMessage({
                 type: MessageType.ERROR,
-                content: 'Failed to compress chat history.',
+                content: '压缩聊天历史失败。',
                 timestamp: new Date(),
               });
             }
           } catch (e) {
             addMessage({
               type: MessageType.ERROR,
-              content: `Failed to compress chat history: ${e instanceof Error ? e.message : String(e)}`,
+              content: `压缩聊天历史失败：${e instanceof Error ? e.message : String(e)}`,
               timestamp: new Date(),
             });
           }
@@ -855,7 +855,7 @@ export const useSlashCommandProcessor = (
       commands.push({
         name: 'restore',
         description:
-          'restore a tool call. This will reset the conversation and file history to the state it was in when the tool call was suggested',
+          '恢复工具调用。这将将对话和文件历史重置为工具调用被建议时的状态',
         completion: async () => {
           const checkpointDir = config?.getProjectTempDir()
             ? path.join(config.getProjectTempDir(), 'checkpoints')
@@ -964,7 +964,7 @@ export const useSlashCommandProcessor = (
           } catch (error) {
             addMessage({
               type: MessageType.ERROR,
-              content: `Could not read restorable tool calls. This is the error: ${error}`,
+              content: `无法读取可恢复的工具调用。错误信息：${error}`,
               timestamp: new Date(),
             });
           }
