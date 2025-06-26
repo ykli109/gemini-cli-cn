@@ -1,40 +1,40 @@
-# Checkpointing
+# 检查点
 
-The Gemini CLI includes a Checkpointing feature that automatically saves a snapshot of your project's state before any file modifications are made by AI-powered tools. This allows you to safely experiment with and apply code changes, knowing you can instantly revert back to the state before the tool was run.
+Gemini CLI 包含检查点功能，在 AI 驱动的工具进行任何文件修改之前，会自动保存项目状态的快照。这使您可以安全地实验和应用代码更改，知道您可以立即回滚到工具运行之前的状态。
 
-## How It Works
+## 工作原理
 
-When you approve a tool that modifies the file system (like `write_file` or `replace`), the CLI automatically creates a "checkpoint." This checkpoint includes:
+当您批准修改文件系统的工具（如 `write_file` 或 `replace`）时，CLI 会自动创建一个"检查点"。此检查点包括：
 
-1.  **A Git Snapshot:** A commit is made in a special, shadow Git repository located in your home directory (`~/.gemini/history/<project_hash>`). This snapshot captures the complete state of your project files at that moment. It does **not** interfere with your own project's Git repository.
-2.  **Conversation History:** The entire conversation you've had with the agent up to that point is saved.
-3.  **The Tool Call:** The specific tool call that was about to be executed is also stored.
+1.  **Git 快照：** 在位于您主目录的特殊影子 Git 仓库（`~/.gemini/history/<project_hash>`）中创建提交。此快照捕获该时刻项目文件的完整状态。它**不会**干扰您自己项目的 Git 仓库。
+2.  **对话历史：** 保存您与代理进行的整个对话历史。
+3.  **工具调用：** 即将执行的特定工具调用也会被存储。
 
-If you want to undo the change or simply go back, you can use the `/restore` command. Restoring a checkpoint will:
+如果您想撤销更改或简单地回到之前的状态，可以使用 `/restore` 命令。恢复检查点将：
 
-- Revert all files in your project to the state captured in the snapshot.
-- Restore the conversation history in the CLI.
-- Re-propose the original tool call, allowing you to run it again, modify it, or simply ignore it.
+- 将项目中的所有文件恢复到快照捕获的状态。
+- 恢复 CLI 中的对话历史。
+- 重新提议原始工具调用，允许您再次运行它、修改它或简单地忽略它。
 
-All checkpoint data, including the Git snapshot and conversation history, is stored locally on your machine. The Git snapshot is stored in the shadow repository while the conversation history and tool calls are saved in a JSON file in your project's temporary directory, typically located at `~/.gemini/tmp/<project_hash>/checkpoints`.
+所有检查点数据，包括 Git 快照和对话历史，都存储在您的本地计算机上。Git 快照存储在影子仓库中，而对话历史和工具调用保存在项目临时目录的 JSON 文件中，通常位于 `~/.gemini/tmp/<project_hash>/checkpoints`。
 
-## Enabling the Feature
+## 启用功能
 
-The Checkpointing feature is disabled by default. To enable it, you can either use a command-line flag or edit your `settings.json` file.
+检查点功能默认禁用。要启用它，您可以使用命令行标志或编辑您的 `settings.json` 文件。
 
-### Using the Command-Line Flag
+### 使用命令行标志
 
-You can enable checkpointing for the current session by using the `--checkpointing` flag when starting the Gemini CLI:
+您可以在启动 Gemini CLI 时使用 `--checkpointing` 标志为当前会话启用检查点：
 
 ```bash
 gemini --checkpointing
 ```
 
-### Using the `settings.json` File
+### 使用 `settings.json` 文件
 
-To enable checkpointing by default for all sessions, you need to edit your `settings.json` file.
+要为所有会话默认启用检查点，您需要编辑您的 `settings.json` 文件。
 
-Add the following key to your `settings.json`:
+将以下键添加到您的 `settings.json`：
 
 ```json
 {
@@ -44,32 +44,32 @@ Add the following key to your `settings.json`:
 }
 ```
 
-## Using the `/restore` Command
+## 使用 `/restore` 命令
 
-Once enabled, checkpoints are created automatically. To manage them, you use the `/restore` command.
+启用后，检查点会自动创建。要管理它们，您可以使用 `/restore` 命令。
 
-### List Available Checkpoints
+### 列出可用检查点
 
-To see a list of all saved checkpoints for the current project, simply run:
+要查看当前项目的所有已保存检查点列表，只需运行：
 
 ```
 /restore
 ```
 
-The CLI will display a list of available checkpoint files. These file names are typically composed of a timestamp, the name of the file being modified, and the name of the tool that was about to be run (e.g., `2025-06-22T10-00-00_000Z-my-file.txt-write_file`).
+CLI 将显示可用检查点文件的列表。这些文件名通常由时间戳、正在修改的文件名称和即将运行的工具名称组成（例如，`2025-06-22T10-00-00_000Z-my-file.txt-write_file`）。
 
-### Restore a Specific Checkpoint
+### 恢复特定检查点
 
-To restore your project to a specific checkpoint, use the checkpoint file from the list:
+要将项目恢复到特定检查点，请使用列表中的检查点文件：
 
 ```
 /restore <checkpoint_file>
 ```
 
-For example:
+例如：
 
 ```
 /restore 2025-06-22T10-00-00_000Z-my-file.txt-write_file
 ```
 
-After running the command, your files and conversation will be immediately restored to the state they were in when the checkpoint was created, and the original tool prompt will reappear.
+运行命令后，您的文件和对话将立即恢复到创建检查点时的状态，原始工具提示将重新出现。

@@ -1,19 +1,19 @@
-# Themes
+# 主题
 
-Gemini CLI supports a variety of themes to customize its color scheme and appearance. You can change the theme to suit your preferences via the `/theme` command or `"theme":` configuration setting.
+Gemini CLI 支持多种主题来自定义其配色方案和外观。您可以通过 `/theme` 命令或 `"theme":` 配置设置更改主题以适合您的偏好。
 
-## Available Themes
+## 可用主题
 
-Gemini CLI comes with a selection of pre-defined themes, which you can list using the `/theme` command within Gemini CLI:
+Gemini CLI 附带了一系列预定义主题，您可以在 Gemini CLI 中使用 `/theme` 命令列出：
 
-- **Dark Themes:**
+- **深色主题：**
   - `ANSI`
   - `Atom One`
   - `Ayu`
   - `Default`
   - `Dracula`
   - `GitHub`
-- **Light Themes:**
+- **浅色主题：**
   - `ANSI Light`
   - `Ayu Light`
   - `Default Light`
@@ -21,18 +21,18 @@ Gemini CLI comes with a selection of pre-defined themes, which you can list usin
   - `Google Code`
   - `Xcode`
 
-### Changing Themes
+### 更改主题
 
-1.  Enter `/theme` into Gemini CLI.
-2.  A dialog or selection prompt appears, listing the available themes.
-3.  Using the arrow keys, select a theme. Some interfaces might offer a live preview or highlight as you select.
-4.  Confirm your selection to apply the theme.
+1.  在 Gemini CLI 中输入 `/theme`。
+2.  出现对话框或选择提示，列出可用主题。
+3.  使用箭头键选择主题。某些界面可能在您选择时提供实时预览或高亮显示。
+4.  确认您的选择以应用主题。
 
-### Theme Persistence
+### 主题持久性
 
-Selected themes are saved in Gemini CLI's [configuration](./docs/cli/configuration.md) so your preference is remembered across sessions.
+选定的主题保存在 Gemini CLI 的[配置](./docs/cli/configuration.md)中，因此您的偏好在会话之间被记住。
 
-## Dark Themes
+## 深色主题
 
 ### ANSI
 
@@ -58,7 +58,7 @@ Selected themes are saved in Gemini CLI's [configuration](./docs/cli/configurati
 
 <img src="../assets/theme-github.png" alt="GitHub theme" width="600">
 
-## Light Themes
+## 浅色主题
 
 ### ANSI Light
 

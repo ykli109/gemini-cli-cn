@@ -1,44 +1,44 @@
-# Memory Tool (`save_memory`)
+# 内存工具（`save_memory`）
 
-This document describes the `save_memory` tool for the Gemini CLI.
+本文档描述了 Gemini CLI 的 `save_memory` 工具。
 
-## Description
+## 描述
 
-Use `save_memory` to save and recall information across your Gemini CLI sessions. With `save_memory`, you can direct the CLI to remember key details across sessions, providing personalized and directed assistance.
+使用 `save_memory` 在您的 Gemini CLI 会话中保存和回忆信息。使用 `save_memory`，您可以指示 CLI 在会话之间记住关键详细信息，提供个性化和有针对性的帮助。
 
-### Arguments
+### 参数
 
-`save_memory` takes one argument:
+`save_memory` 接受一个参数：
 
-- `fact` (string, required): The specific fact or piece of information to remember. This should be a clear, self-contained statement written in natural language.
+- `fact`（字符串，必需）：要记住的具体事实或信息片段。这应该是一个用自然语言编写的清晰、自包含的陈述。
 
-## How to use `save_memory` with the Gemini CLI
+## 如何在 Gemini CLI 中使用 `save_memory`
 
-The tool appends the provided `fact` to a special `GEMINI.md` file located in the user's home directory (`~/.gemini/GEMINI.md`). This file can be configured to have a different name.
+该工具将提供的 `fact` 附加到位于用户主目录（`~/.gemini/GEMINI.md`）的特殊 `GEMINI.md` 文件中。此文件可以配置为具有不同的名称。
 
-Once added, the facts are stored under a `## Gemini Added Memories` section. This file is loaded as context in subsequent sessions, allowing the CLI to recall the saved information.
+添加后，事实存储在 `## Gemini Added Memories` 部分下。此文件作为后续会话中的上下文加载，允许 CLI 回忆保存的信息。
 
-Usage:
-
-```
-save_memory(fact="Your fact here.")
-```
-
-### `save_memory` examples
-
-Remember a user preference:
+用法：
 
 ```
-save_memory(fact="My preferred programming language is Python.")
+save_memory(fact="您的事实在这里。")
 ```
 
-Store a project-specific detail:
+### `save_memory` 示例
+
+记住用户偏好：
 
 ```
-save_memory(fact="The project I'm currently working on is called 'gemini-cli'.")
+save_memory(fact="我首选的编程语言是 Python。")
 ```
 
-## Important notes
+存储项目特定的详细信息：
 
-- **General usage:** This tool should be used for concise, important facts. It is not intended for storing large amounts of data or conversational history.
-- **Memory file:** The memory file is a plain text Markdown file, so you can view and edit it manually if needed.
+```
+save_memory(fact="我目前正在进行的项目叫做 'gemini-cli'。")
+```
+
+## 重要说明
+
+- **一般用法：** 此工具应用于简洁、重要的事实。它不适用于存储大量数据或对话历史。
+- **内存文件：** 内存文件是纯文本 Markdown 文件，因此如果需要，您可以手动查看和编辑它。

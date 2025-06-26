@@ -1,150 +1,150 @@
-# CLI Commands
+# CLI 命令
 
-Gemini CLI supports several built-in commands to help you manage your session, customize the interface, and control its behavior. These commands are prefixed with a forward slash (`/`), an at symbol (`@`), or an exclamation mark (`!`).
+Gemini CLI 支持多个内置命令来帮助您管理会话、自定义界面和控制其行为。这些命令以正斜杠（`/`）、at 符号（`@`）或感叹号（`!`）为前缀。
 
-## Slash commands (`/`)
+## 斜杠命令（`/`）
 
-Slash commands provide meta-level control over the CLI itself.
+斜杠命令提供对 CLI 本身的元级别控制。
 
 - **`/bug`**
 
-  - **Description:** File an issue about Gemini CLI. By default, the issue is filed within the GitHub repository for Gemini CLI. The string you enter after `/bug` will become the headline for the bug being filed. The default `/bug` behavior can be modified using the `bugCommand` setting in your `.gemini/settings.json` files.
+  - **描述：** 提交关于 Gemini CLI 的问题。默认情况下，问题在 Gemini CLI 的 GitHub 仓库中提交。您在 `/bug` 后输入的字符串将成为提交的 bug 的标题。默认的 `/bug` 行为可以通过您的 `.gemini/settings.json` 文件中的 `bugCommand` 设置进行修改。
 
 - **`/chat`**
 
-  - **Description:** Save and resume conversation history for branching conversation state interactively, or resuming a previous state from a later session.
-  - **Sub-commands:**
+  - **描述：** 保存和恢复对话历史，用于交互式分支对话状态，或从后续会话中恢复之前的状态。
+  - **子命令：**
     - **`save`**
-      - **Description:** Saves the current conversation history. You must add a `<tag>` for identifying the conversation state.
-      - **Usage:** `/chat save <tag>`
+      - **描述：** 保存当前对话历史。您必须添加一个 `<tag>` 来标识对话状态。
+      - **用法：** `/chat save <tag>`
     - **`resume`**
-      - **Description:** Resumes a conversation from a previous save.
-      - **Usage:** `/chat resume <tag>`
+      - **描述：** 从之前的保存中恢复对话。
+      - **用法：** `/chat resume <tag>`
     - **`list`**
-      - **Description:** Lists available tags for chat state resumption.
+      - **描述：** 列出可用于聊天状态恢复的标签。
 
 - **`/clear`**
 
-  - **Description:** Clear the terminal screen, including the visible session history and scrollback within the CLI. The underlying session data (for history recall) might be preserved depending on the exact implementation, but the visual display is cleared.
-  - **Keyboard shortcut:** Press **Ctrl+L** at any time to perform a clear action.
+  - **描述：** 清除终端屏幕，包括 CLI 中的可见会话历史和回滚。根据具体实现，底层会话数据（用于历史回调）可能会被保留，但视觉显示会被清除。
+  - **键盘快捷键：** 随时按 **Ctrl+L** 执行清除操作。
 
 - **`/compress`**
 
-  - **Description:** Replace the entire chat context with a summary. This saves on tokens used for future tasks while retaining a high level summary of what has happened.
+  - **描述：** 将整个聊天上下文替换为摘要。这节省了未来任务使用的令牌，同时保留了已发生事件的高级摘要。
 
 - **`/editor`**
 
-  - **Description:** Open a dialog for selecting supported editors.
+  - **描述：** 打开一个对话框来选择支持的编辑器。
 
-- **`/help`** (or **`/?`**)
+- **`/help`**（或 **`/?`**）
 
-  - **Description:** Display help information about the Gemini CLI, including available commands and their usage.
+  - **描述：** 显示关于 Gemini CLI 的帮助信息，包括可用命令及其用法。
 
 - **`/mcp`**
 
-  - **Description:** List configured Model Context Protocol (MCP) servers, their connection status, server details, and available tools.
-  - **Sub-commands:**
-    - **`desc`** or **`descriptions`**:
-      - **Description:** Show detailed descriptions for MCP servers and tools.
-    - **`nodesc`** or **`nodescriptions`**:
-      - **Description:** Hide tool descriptions, showing only the tool names.
-    - **`schema`**:
-      - **Description:** Show the full JSON schema for the tool's configured parameters.
-  - **Keyboard Shortcut:** Press **Ctrl+T** at any time to toggle between showing and hiding tool descriptions.
+  - **描述：** 列出配置的模型上下文协议（MCP）服务器、它们的连接状态、服务器详细信息和可用工具。
+  - **子命令：**
+    - **`desc`** 或 **`descriptions`**：
+      - **描述：** 显示 MCP 服务器和工具的详细描述。
+    - **`nodesc`** 或 **`nodescriptions`**：
+      - **描述：** 隐藏工具描述，仅显示工具名称。
+    - **`schema`**：
+      - **描述：** 显示工具配置参数的完整 JSON 模式。
+  - **键盘快捷键：** 随时按 **Ctrl+T** 在显示和隐藏工具描述之间切换。
 
 - **`/memory`**
 
-  - **Description:** Manage the AI's instructional context (hierarchical memory loaded from `GEMINI.md` files).
-  - **Sub-commands:**
-    - **`add`**:
-      - **Description:** Adds the following text to the AI's memory. Usage: `/memory add <text to remember>`
-    - **`show`**:
-      - **Description:** Display the full, concatenated content of the current hierarchical memory that has been loaded from all `GEMINI.md` files. This lets you inspect the instructional context being provided to the Gemini model.
-    - **`refresh`**:
-      - **Description:** Reload the hierarchical instructional memory from all `GEMINI.md` files found in the configured locations (global, project/ancestors, and sub-directories). This command updates the model with the latest `GEMINI.md` content.
-    - **Note:** For more details on how `GEMINI.md` files contribute to hierarchical memory, see the [CLI Configuration documentation](./configuration.md#4-geminimd-files-hierarchical-instructional-context).
+  - **描述：** 管理 AI 的指令上下文（从 `GEMINI.md` 文件加载的分层内存）。
+  - **子命令：**
+    - **`add`**：
+      - **描述：** 将以下文本添加到 AI 的内存中。用法：`/memory add <要记住的文本>`
+    - **`show`**：
+      - **描述：** 显示从所有 `GEMINI.md` 文件加载的当前分层内存的完整连接内容。这让您检查提供给 Gemini 模型的指令上下文。
+    - **`refresh`**：
+      - **描述：** 从配置位置（全局、项目/祖先和子目录）中找到的所有 `GEMINI.md` 文件重新加载分层指令内存。此命令使用最新的 `GEMINI.md` 内容更新模型。
+    - **注意：** 有关 `GEMINI.md` 文件如何贡献分层内存的更多详细信息，请参阅 [CLI 配置文档](./configuration.md#4-geminimd-files-hierarchical-instructional-context)。
 
 - **`/restore`**
 
-  - **Description:** Restores the project files to the state they were in just before a tool was executed. This is particularly useful for undoing file edits made by a tool. If run without a tool call ID, it will list available checkpoints to restore from.
-  - **Usage:** `/restore [tool_call_id]`
-  - **Note:** Only available if the CLI is invoked with the `--checkpointing` option or configured via [settings](./configuration.md). See [Checkpointing documentation](../checkpointing.md) for more details.
+  - **描述：** 将项目文件恢复到执行工具之前的状态。这对于撤销工具所做的文件编辑特别有用。如果不带工具调用 ID 运行，它将列出可恢复的可用检查点。
+  - **用法：** `/restore [tool_call_id]`
+  - **注意：** 仅在使用 `--checkpointing` 选项调用 CLI 或通过[设置](./configuration.md)配置时可用。有关更多详细信息，请参阅[检查点文档](../checkpointing.md)。
 
 - **`/stats`**
 
-  - **Description:** Display detailed statistics for the current Gemini CLI session, including token usage, cached token savings (when available), and session duration. Note: Cached token information is only displayed when cached tokens are being used, which occurs with API key authentication but not with OAuth authentication at this time.
+  - **描述：** 显示当前 Gemini CLI 会话的详细统计信息，包括令牌使用情况、缓存令牌节省（如果可用）和会话持续时间。注意：缓存令牌信息仅在使用缓存令牌时显示，这发生在 API 密钥认证中，但目前不适用于 OAuth 认证。
 
 - [**`/theme`**](./themes.md)
 
-  - **Description:** Open a dialog that lets you change the visual theme of Gemini CLI.
+  - **描述：** 打开一个对话框，让您更改 Gemini CLI 的视觉主题。
 
 - **`/auth`**
 
-  - **Description:** Open a dialog that lets you change the authentication method.
+  - **描述：** 打开一个对话框，让您更改认证方法。
 
 - **`/about`**
 
-  - **Description:** Show version info. Please share this information when filing issues.
+  - **描述：** 显示版本信息。在提交问题时请分享此信息。
 
 - [**`/tools`**](../tools/index.md)
 
-  - **Description:** Display a list of tools that are currently available within Gemini CLI.
-  - **Sub-commands:**
-    - **`desc`** or **`descriptions`**:
-      - **Description:** Show detailed descriptions of each tool, including each tool's name with its full description as provided to the model.
-    - **`nodesc`** or **`nodescriptions`**:
-      - **Description:** Hide tool descriptions, showing only the tool names.
+  - **描述：** 显示 Gemini CLI 中当前可用的工具列表。
+  - **子命令：**
+    - **`desc`** 或 **`descriptions`**：
+      - **描述：** 显示每个工具的详细描述，包括每个工具的名称及其提供给模型的完整描述。
+    - **`nodesc`** 或 **`nodescriptions`**：
+      - **描述：** 隐藏工具描述，仅显示工具名称。
 
-- **`/quit`** (or **`/exit`**)
+- **`/quit`**（或 **`/exit`**）
 
-  - **Description:** Exit Gemini CLI.
+  - **描述：** 退出 Gemini CLI。
 
-## At commands (`@`)
+## At 命令（`@`）
 
-At commands are used to include the content of files or directories as part of your prompt to Gemini. These commands include git-aware filtering.
+At 命令用于将文件或目录的内容作为您向 Gemini 提示的一部分包含在内。这些命令包括 git 感知过滤。
 
 - **`@<path_to_file_or_directory>`**
 
-  - **Description:** Inject the content of the specified file or files into your current prompt. This is useful for asking questions about specific code, text, or collections of files.
-  - **Examples:**
-    - `@path/to/your/file.txt Explain this text.`
-    - `@src/my_project/ Summarize the code in this directory.`
-    - `What is this file about? @README.md`
-  - **Details:**
-    - If a path to a single file is provided, the content of that file is read.
-    - If a path to a directory is provided, the command attempts to read the content of files within that directory and any subdirectories.
-    - Spaces in paths should be escaped with a backslash (e.g., `@My\ Documents/file.txt`).
-    - The command uses the `read_many_files` tool internally. The content is fetched and then inserted into your query before being sent to the Gemini model.
-    - **Git-aware filtering:** By default, git-ignored files (like `node_modules/`, `dist/`, `.env`, `.git/`) are excluded. This behavior can be changed via the `fileFiltering` settings.
-    - **File types:** The command is intended for text-based files. While it might attempt to read any file, binary files or very large files might be skipped or truncated by the underlying `read_many_files` tool to ensure performance and relevance. The tool indicates if files were skipped.
-  - **Output:** The CLI will show a tool call message indicating that `read_many_files` was used, along with a message detailing the status and the path(s) that were processed.
+  - **描述：** 将指定文件或文件的内容注入到您当前的提示中。这对于询问有关特定代码、文本或文件集合的问题很有用。
+  - **示例：**
+    - `@path/to/your/file.txt 解释这个文本。`
+    - `@src/my_project/ 总结此目录中的代码。`
+    - `这个文件是关于什么的？ @README.md`
+  - **详细信息：**
+    - 如果提供的是单个文件的路径，则读取该文件的内容。
+    - 如果提供的是目录的路径，命令尝试读取该目录和任何子目录中文件的内容。
+    - 路径中的空格应该用反斜杠转义（例如，`@My\ Documents/file.txt`）。
+    - 该命令在内部使用 `read_many_files` 工具。内容被获取，然后在发送到 Gemini 模型之前插入到您的查询中。
+    - **Git 感知过滤：** 默认情况下，git 忽略的文件（如 `node_modules/`、`dist/`、`.env`、`.git/`）被排除。此行为可以通过 `fileFiltering` 设置更改。
+    - **文件类型：** 该命令适用于基于文本的文件。虽然它可能尝试读取任何文件，但二进制文件或非常大的文件可能会被底层的 `read_many_files` 工具跳过或截断，以确保性能和相关性。该工具指示文件是否被跳过。
+  - **输出：** CLI 将显示一个工具调用消息，指示使用了 `read_many_files`，以及详细说明状态和处理的路径的消息。
 
-- **`@` (Lone at symbol)**
-  - **Description:** If you type a lone `@` symbol without a path, the query is passed as-is to the Gemini model. This might be useful if you are specifically talking _about_ the `@` symbol in your prompt.
+- **`@`（单独的 at 符号）**
+  - **描述：** 如果您键入一个单独的 `@` 符号而没有路径，查询将按原样传递给 Gemini 模型。如果您在提示中专门谈论 `@` 符号，这可能很有用。
 
-### Error handling for `@` commands
+### `@` 命令的错误处理
 
-- If the path specified after `@` is not found or is invalid, an error message will be displayed, and the query might not be sent to the Gemini model, or it will be sent without the file content.
-- If the `read_many_files` tool encounters an error (e.g., permission issues), this will also be reported.
+- 如果在 `@` 后指定的路径未找到或无效，将显示错误消息，查询可能不会发送到 Gemini 模型，或者将在没有文件内容的情况下发送。
+- 如果 `read_many_files` 工具遇到错误（例如，权限问题），这也将被报告。
 
-## Shell mode & passthrough commands (`!`)
+## Shell 模式和直通命令（`!`）
 
-The `!` prefix lets you interact with your system's shell directly from within Gemini CLI.
+`!` 前缀让您直接从 Gemini CLI 内部与系统的 shell 交互。
 
 - **`!<shell_command>`**
 
-  - **Description:** Execute the given `<shell_command>` in your system's default shell. Any output or errors from the command are displayed in the terminal.
-  - **Examples:**
-    - `!ls -la` (executes `ls -la` and returns to Gemini CLI)
-    - `!git status` (executes `git status` and returns to Gemini CLI)
+  - **描述：** 在系统的默认 shell 中执行给定的 `<shell_command>`。命令的任何输出或错误都显示在终端中。
+  - **示例：**
+    - `!ls -la`（执行 `ls -la` 并返回到 Gemini CLI）
+    - `!git status`（执行 `git status` 并返回到 Gemini CLI）
 
-- **`!` (Toggle shell mode)**
+- **`!`（切换 shell 模式）**
 
-  - **Description:** Typing `!` on its own toggles shell mode.
-    - **Entering shell mode:**
-      - When active, shell mode uses a different coloring and a "Shell Mode Indicator".
-      - While in shell mode, text you type is interpreted directly as a shell command.
-    - **Exiting shell mode:**
-      - When exited, the UI reverts to its standard appearance and normal Gemini CLI behavior resumes.
+  - **描述：** 单独键入 `!` 切换 shell 模式。
+    - **进入 shell 模式：**
+      - 当活动时，shell 模式使用不同的着色和"Shell 模式指示器"。
+      - 在 shell 模式下，您键入的文本直接解释为 shell 命令。
+    - **退出 shell 模式：**
+      - 退出时，UI 恢复为标准外观，正常的 Gemini CLI 行为恢复。
 
-- **Caution for all `!` usage:** Commands you execute in shell mode have the same permissions and impact as if you ran them directly in your terminal.
+- **所有 `!` 用法的注意事项：** 您在 shell 模式中执行的命令具有与您直接在终端中运行它们相同的权限和影响。
