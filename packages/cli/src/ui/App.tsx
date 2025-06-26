@@ -814,13 +814,8 @@ const App = ({ config, settings, startupWarnings = [] }: AppProps) => {
                 </Text>
               ) : (
                 <>
-                  <Text color={Colors.AccentRed}>
-                    初始化错误：{initError}
-                  </Text>
-                  <Text color={Colors.AccentRed}>
-                    {' '}
-                    请检查 API 密钥和配置。
-                  </Text>
+                  <Text color={Colors.AccentRed}>初始化错误：{initError}</Text>
+                  <Text color={Colors.AccentRed}> 请检查 API 密钥和配置。</Text>
                 </>
               )}
             </Box>
@@ -842,6 +837,7 @@ const App = ({ config, settings, startupWarnings = [] }: AppProps) => {
               sessionStats.currentResponse.candidatesTokenCount
             }
             totalTokenCount={sessionStats.currentResponse.totalTokenCount}
+            cumulativeTotalTokenCount={sessionStats.cumulative.totalTokenCount}
           />
         </Box>
       </Box>

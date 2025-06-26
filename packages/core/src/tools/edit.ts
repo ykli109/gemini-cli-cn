@@ -222,10 +222,10 @@ Expectation for required parameters:
       isNewFile = true;
     } else if (!fileExists) {
       // Trying to edit a non-existent file (and old_string is not empty)
-              error = {
-          display: `文件未找到。无法应用编辑。使用空的 old_string 创建新文件。`,
-          raw: `File not found: ${params.file_path}`,
-        };
+      error = {
+        display: `文件未找到。无法应用编辑。使用空的 old_string 创建新文件。`,
+        raw: `File not found: ${params.file_path}`,
+      };
     } else if (currentContent !== null) {
       // Editing an existing file
       const correctedEdit = await ensureCorrectEdit(

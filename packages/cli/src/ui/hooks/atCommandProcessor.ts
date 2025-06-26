@@ -149,7 +149,7 @@ export async function handleAtCommand({
 
   if (!readManyFilesTool) {
     addItem(
-              { type: 'error', text: '错误：未找到 read_many_files 工具。' },
+      { type: 'error', text: '错误：未找到 read_many_files 工具。' },
       userMessageTimestamp,
     );
     return { processedQuery: null, shouldProceed: false };

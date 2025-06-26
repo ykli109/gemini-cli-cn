@@ -301,9 +301,7 @@ export class Theme {
     }
 
     // 4. Could not resolve
-    console.warn(
-      `[主题] 无法将颜色 "${colorValue}" 解析为 Ink 兼容格式。`,
-    );
+    console.warn(`[主题] 无法将颜色 "${colorValue}" 解析为 Ink 兼容格式。`);
     return undefined;
   }
 

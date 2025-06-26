@@ -25,6 +25,7 @@ interface FooterProps {
   promptTokenCount: number;
   candidatesTokenCount: number;
   totalTokenCount: number;
+  cumulativeTotalTokenCount: number;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -38,6 +39,7 @@ export const Footer: React.FC<FooterProps> = ({
   showErrorDetails,
   showMemoryUsage,
   totalTokenCount,
+  cumulativeTotalTokenCount,
 }) => {
   const limit = tokenLimit(model);
   const percentage = totalTokenCount / limit;
@@ -85,7 +87,8 @@ export const Footer: React.FC<FooterProps> = ({
           {' '}
           {model}{' '}
           <Text color={Colors.Gray}>
-            (剩余 {((1 - percentage) * 100).toFixed(0)}% 上下文)
+            (消耗token数量 {totalTokenCount} / {cumulativeTotalTokenCount} 剩余{' '}
+            {((1 - percentage) * 100).toFixed(0)}% 上下文)
           </Text>
         </Text>
         {corgiMode && (

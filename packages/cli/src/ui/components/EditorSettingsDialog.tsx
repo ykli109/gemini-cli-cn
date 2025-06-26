@@ -134,9 +134,7 @@ export function EditorSettingsDialog({
         </Box>
 
         <Box marginTop={1}>
-          <Text color={Colors.Gray}>
-            (使用 Enter 选择，Tab 切换焦点)
-          </Text>
+          <Text color={Colors.Gray}>(使用 Enter 选择，Tab 切换焦点)</Text>
         </Box>
       </Box>
 
@@ -150,9 +148,7 @@ export function EditorSettingsDialog({
             您的首选编辑器是：{' '}
             <Text
               color={
-                mergedEditorName === '无'
-                  ? Colors.AccentRed
-                  : Colors.AccentCyan
+                mergedEditorName === '无' ? Colors.AccentRed : Colors.AccentCyan
               }
               bold
             >

@@ -42,9 +42,7 @@ export function AuthInProgress({
       width="100%"
     >
       {timedOut ? (
-        <Text color={Colors.AccentRed}>
-          认证超时。请重试。
-        </Text>
+        <Text color={Colors.AccentRed}>认证超时。请重试。</Text>
       ) : (
         <Box>
           <Text>

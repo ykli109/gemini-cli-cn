@@ -97,9 +97,7 @@ export const ToolConfirmationMessage: React.FC<
           overflow="hidden"
         >
           <Text>修改进行中：</Text>
-          <Text color={Colors.AccentGreen}>
-            保存并关闭外部编辑器以继续
-          </Text>
+          <Text color={Colors.AccentGreen}>保存并关闭外部编辑器以继续</Text>
         </Box>
       );
     }

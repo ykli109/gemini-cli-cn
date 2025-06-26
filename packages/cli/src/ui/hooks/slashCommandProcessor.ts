@@ -471,8 +471,7 @@ export const useSlashCommandProcessor = (
       },
       {
         name: 'memory',
-        description:
-          '管理内存。用法：/memory <show|refresh|add> [添加的文本]',
+        description: '管理内存。用法：/memory <show|refresh|add> [添加的文本]',
         action: (mainCommand, subCommand, args) => {
           switch (subCommand) {
             case 'show':
@@ -662,8 +661,7 @@ export const useSlashCommandProcessor = (
       },
       {
         name: 'chat',
-        description:
-          '管理对话历史。用法：/chat <list|save|resume> [标签]',
+        description: '管理对话历史。用法：/chat <list|save|resume> [标签]',
         action: async (_mainCommand, subCommand, args) => {
           const tag = (args || '').trim();
           const logger = new Logger(config?.getSessionId() || '');

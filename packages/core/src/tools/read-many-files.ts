@@ -394,11 +394,10 @@ Use this tool when the user's query implies needing the content of several files
         );
 
         if (!requestedExplicitly) {
-                  skippedFiles.push({
-          path: relativePathForDisplay,
-          reason:
-            '资源文件（图片/PDF）未被明确按名称或扩展名请求',
-        });
+          skippedFiles.push({
+            path: relativePathForDisplay,
+            reason: '资源文件（图片/PDF）未被明确按名称或扩展名请求',
+          });
           continue;
         }
       }

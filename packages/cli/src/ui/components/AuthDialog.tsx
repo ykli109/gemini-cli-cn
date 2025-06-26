@@ -59,9 +59,7 @@ export function AuthDialog({
     if (key.escape) {
       if (settings.merged.selectedAuthType === undefined) {
         // Prevent exiting if no auth method is set
-        setErrorMessage(
-          '您必须选择一种认证方式才能继续。按两次 Ctrl+C 退出。',
-        );
+        setErrorMessage('您必须选择一种认证方式才能继续。按两次 Ctrl+C 退出。');
         return;
       }
       onSelect(undefined, SettingScope.User);

@@ -27,7 +27,7 @@ export const ConsoleSummaryDisplay: React.FC<ConsoleSummaryDisplayProps> = ({
       {errorCount > 0 && (
         <Text color={Colors.AccentRed}>
           {errorIcon} {errorCount} 个错误{' '}
-                      <Text color={Colors.Gray}>(ctrl+o 查看详情)</Text>
+          <Text color={Colors.Gray}>(ctrl+o 查看详情)</Text>
         </Text>
       )}
     </Box>

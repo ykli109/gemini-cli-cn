@@ -735,9 +735,7 @@ export const useGeminiStream = (
           await fs.mkdir(checkpointDir, { recursive: true });
         } catch (error) {
           if (!isNodeError(error) || error.code !== 'EEXIST') {
-            onDebugMessage(
-              `创建检查点目录失败：${getErrorMessage(error)}`,
-            );
+            onDebugMessage(`创建检查点目录失败：${getErrorMessage(error)}`);
             return;
           }
         }
@@ -799,9 +797,7 @@ export const useGeminiStream = (
             );
           } catch (error) {
             onDebugMessage(
-              `写入可恢复工具调用文件失败：${getErrorMessage(
-                error,
-              )}`,
+              `写入可恢复工具调用文件失败：${getErrorMessage(error)}`,
             );
           }
         }

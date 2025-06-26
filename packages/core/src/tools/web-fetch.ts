@@ -140,11 +140,11 @@ ${textContent}
       };
     } catch (e) {
       const error = e as Error;
-              const errorMessage = `Error during fallback fetch for ${url}: ${error.message}`;
-        return {
-          llmContent: `Error: ${errorMessage}`,
-          returnDisplay: `错误：${errorMessage}`,
-        };
+      const errorMessage = `Error during fallback fetch for ${url}: ${error.message}`;
+      return {
+        llmContent: `Error: ${errorMessage}`,
+        returnDisplay: `错误：${errorMessage}`,
+      };
     }
   }
 
@@ -350,11 +350,11 @@ ${sourceListFormatted.join('\n')}`;
         0,
         50,
       )}...": ${getErrorMessage(error)}`;
-              console.error(errorMessage, error);
-        return {
-          llmContent: `Error: ${errorMessage}`,
-          returnDisplay: `错误：${errorMessage}`,
-        };
+      console.error(errorMessage, error);
+      return {
+        llmContent: `Error: ${errorMessage}`,
+        returnDisplay: `错误：${errorMessage}`,
+      };
     }
   }
 }

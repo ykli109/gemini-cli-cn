@@ -186,10 +186,10 @@ export class WebSearchTool extends BaseTool<
     } catch (error: unknown) {
       const errorMessage = `Error during web search for query "${params.query}": ${getErrorMessage(error)}`;
       console.error(errorMessage, error);
-              return {
-          llmContent: `Error: ${errorMessage}`,
-          returnDisplay: `网络搜索执行错误。`,
-        };
+      return {
+        llmContent: `Error: ${errorMessage}`,
+        returnDisplay: `网络搜索执行错误。`,
+      };
     }
   }
 }

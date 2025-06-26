@@ -225,11 +225,11 @@ export class WriteFileTool
 
     if (correctedContentResult.error) {
       const errDetails = correctedContentResult.error;
-              const errorMsg = `检查现有文件时出错：${errDetails.message}`;
-        return {
-          llmContent: `Error checking existing file ${params.file_path}: ${errDetails.message}`,
-          returnDisplay: errorMsg,
-        };
+      const errorMsg = `检查现有文件时出错：${errDetails.message}`;
+      return {
+        llmContent: `Error checking existing file ${params.file_path}: ${errDetails.message}`,
+        returnDisplay: errorMsg,
+      };
     }
 
     const {
