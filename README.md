@@ -27,7 +27,7 @@ Gemini CLI 是一个命令行 AI 工具，能够连接各种工具、理解代�
 
    ```bash
    npm install -g gemini-cli-cn
-   gemini
+   gemini-cn
    ```
 
 3. **选择主题颜色**
