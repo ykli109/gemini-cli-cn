@@ -20,20 +20,20 @@ Gemini CLI 是一个命令行 AI 工具，能够连接各种工具、理解代�
 2. **运行 CLI：** 在终端执行以下命令：
 
    ```bash
-   npx https://github.com/google-gemini/gemini-cli
+   npx https://github.com/ykli109/gemini-cli-cn
    ```
 
    也可以全局安装：
 
    ```bash
-   npm install -g @google/gemini-cli
+   npm install -g gemini-cli-cn
    gemini
    ```
 
 3. **选择主题颜色**
 4. **登录账号：** 按提示用个人 Google 账户登录，每分钟可调用 60 次模型，每天最多 1000 次
 
-现在就可以开始使用 Gemini CLI 了！
+现在就可以开始使用 Gemini CLI 中文版了！
 
 ### 进阶用法
 
