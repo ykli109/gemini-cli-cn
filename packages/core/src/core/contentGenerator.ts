@@ -5,39 +5,27 @@
  */
 
 import {
-  CountTokensResponse,
-  GenerateContentResponse,
   GenerateContentParameters,
+  GenerateContentResponse,
   CountTokensParameters,
-  EmbedContentResponse,
+  CountTokensResponse,
   EmbedContentParameters,
+  EmbedContentResponse,
   GoogleGenAI,
 } from '@google/genai';
 import { createCodeAssistContentGenerator } from '../code_assist/codeAssist.js';
 import { DEFAULT_GEMINI_MODEL } from '../config/models.js';
 import { getEffectiveModel } from './modelCheck.js';
+import { ContentGenerator, ArkContentGenerator, ArkModelConfig } from '../generators/index.js';
 
-/**
- * Interface abstracting the core functionalities for generating content and counting tokens.
- */
-export interface ContentGenerator {
-  generateContent(
-    request: GenerateContentParameters,
-  ): Promise<GenerateContentResponse>;
-
-  generateContentStream(
-    request: GenerateContentParameters,
-  ): Promise<AsyncGenerator<GenerateContentResponse>>;
-
-  countTokens(request: CountTokensParameters): Promise<CountTokensResponse>;
-
-  embedContent(request: EmbedContentParameters): Promise<EmbedContentResponse>;
-}
+// 重新导出 ContentGenerator 接口以保持向后兼容性
+export { ContentGenerator };
 
 export enum AuthType {
   LOGIN_WITH_GOOGLE_PERSONAL = 'oauth-personal',
   USE_GEMINI = 'gemini-api-key',
   USE_VERTEX_AI = 'vertex-ai',
+  USE_ARK = 'ark', // 方舟的模型可以用
 }
 
 export type ContentGeneratorConfig = {
@@ -45,6 +33,9 @@ export type ContentGeneratorConfig = {
   apiKey?: string;
   vertexai?: boolean;
   authType?: AuthType | undefined;
+  baseUrl?: string;
+  customHeaders?: Record<string, string>;
+  timeout?: number;
 };
 
 export async function createContentGeneratorConfig(
@@ -56,9 +47,24 @@ export async function createContentGeneratorConfig(
   const googleApiKey = process.env.GOOGLE_API_KEY;
   const googleCloudProject = process.env.GOOGLE_CLOUD_PROJECT;
   const googleCloudLocation = process.env.GOOGLE_CLOUD_LOCATION;
+  const arkApiKey = process.env.ARK_API_KEY;
+  const arkModel = process.env.ARK_MODEL;
+  const customBaseUrl = process.env.CUSTOM_BASE_URL;
 
-  // Use runtime model from config if available, otherwise fallback to parameter or default
-  const effectiveModel = config?.getModel?.() || model || DEFAULT_GEMINI_MODEL;
+
+  // 根据认证类型选择合适的默认模型
+  let effectiveModel: string;
+  if (authType === AuthType.USE_ARK) {
+    // 方舟模型优先使用传入的model参数，然后是环境变量ARK_MODEL
+    effectiveModel = model || arkModel || '';
+    // 确保是方舟模型格式
+    if (!effectiveModel.startsWith('ep-')) {
+      effectiveModel = '';
+    }
+  } else {
+    // 其他认证类型使用原有逻辑
+    effectiveModel = config?.getModel?.() || model || DEFAULT_GEMINI_MODEL;
+  }
 
   const contentGeneratorConfig: ContentGeneratorConfig = {
     model: effectiveModel,
@@ -70,7 +76,6 @@ export async function createContentGeneratorConfig(
     return contentGeneratorConfig;
   }
 
-  //
   if (authType === AuthType.USE_GEMINI && geminiApiKey) {
     contentGeneratorConfig.apiKey = geminiApiKey;
     contentGeneratorConfig.model = await getEffectiveModel(
@@ -97,8 +102,34 @@ export async function createContentGeneratorConfig(
     return contentGeneratorConfig;
   }
 
+  if (authType === AuthType.USE_ARK && arkApiKey) {
+    contentGeneratorConfig.apiKey = arkApiKey;
+    contentGeneratorConfig.baseUrl = customBaseUrl;
+    
+    // 方舟模型必须明确指定模型名称
+    let arkModelName = effectiveModel;
+    if (!arkModelName) {
+      // 尝试从ARK_MODEL环境变量获取
+      arkModelName = arkModel || '';
+    }
+    
+    if (!arkModelName) {
+      throw new Error(
+        '方舟模型需要明确指定模型名称。请通过以下方式之一指定模型：\n' +
+        '1. 设置 ARK_MODEL 环境变量，例如：export ARK_MODEL="ep-20250627193526-wzbxz"\n' +
+        '2. 使用 --model 命令行参数，例如：--model ep-20250627193526-wzbxz\n' +
+        '3. 在设置文件中配置模型名称'
+      );
+    }
+    
+    contentGeneratorConfig.model = arkModelName;
+    return contentGeneratorConfig;
+  }
+
   return contentGeneratorConfig;
 }
+
+
 
 export async function createContentGenerator(
   config: ContentGeneratorConfig,
@@ -124,6 +155,15 @@ export async function createContentGenerator(
     });
 
     return googleGenAI.models;
+  }
+
+  if (config.authType === AuthType.USE_ARK) {
+    // 确保 baseUrl 有值，如果没有则使用默认值
+    const arkConfig: ArkModelConfig = {
+      ...config,
+      baseUrl: config.baseUrl || 'https://ark-cn-beijing.bytedance.net/api/v3',
+    };
+    return new ArkContentGenerator(arkConfig);
   }
 
   throw new Error(

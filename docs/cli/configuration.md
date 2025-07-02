@@ -239,6 +239,21 @@ CLI 自动从 `.env` 文件加载环境变量。加载顺序为：
   - 指定要使用的默认 Gemini 模型。
   - 覆盖硬编码默认值
   - 示例：`export GEMINI_MODEL="gemini-2.5-flash"`
+- **`ARK_API_KEY`**：
+  - 您的方舟（ARK）API 的 API 密钥。
+  - 使用方舟模型时必需。
+  - 在您的 shell 配置文件中设置（例如，`~/.bashrc`、`~/.zshrc`）或 `.env` 文件中。
+  - 示例：`export ARK_API_KEY="YOUR_ARK_API_KEY"`
+- **`ARK_MODEL`**：
+  - 指定要使用的方舟模型名称。
+  - 使用方舟认证时必需，因为方舟不支持默认模型。
+  - 示例：`export ARK_MODEL="ep-20250627193526-wzbxz"`
+  - 可以通过命令行参数 `--model` 覆盖此设置
+- **`CUSTOM_BASE_URL`**：
+  - 自定义 API 端点地址。
+  - 用于方舟模型或其他自定义模型提供商。
+  - 默认方舟端点：`https://ark-cn-beijing.bytedance.net/api/v3`
+  - 示例：`export CUSTOM_BASE_URL="https://your-custom-endpoint.com/api"`
 - **`GOOGLE_API_KEY`**：
   - 您的 Google Cloud API 密钥。
   - 在快速模式下使用 Vertex AI 所必需。
