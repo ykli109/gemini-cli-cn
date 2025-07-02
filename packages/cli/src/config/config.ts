@@ -60,72 +60,72 @@ async function parseArguments(): Promise<CliArgs> {
     .option('model', {
       alias: 'm',
       type: 'string',
-      description: `Model`,
+      description: `模型`,
       default: process.env.GEMINI_MODEL || DEFAULT_GEMINI_MODEL,
     })
     .option('prompt', {
       alias: 'p',
       type: 'string',
-      description: 'Prompt. Appended to input on stdin (if any).',
+      description: '提示词。追加到标准输入的内容（如果有的话）。',
     })
     .option('sandbox', {
       alias: 's',
       type: 'boolean',
-      description: 'Run in sandbox?',
+      description: '是否在沙箱中运行？',
     })
     .option('sandbox-image', {
       type: 'string',
-      description: 'Sandbox image URI.',
+      description: '沙箱镜像 URI。',
     })
     .option('debug', {
       alias: 'd',
       type: 'boolean',
-      description: 'Run in debug mode?',
+      description: '是否在调试模式下运行？',
       default: false,
     })
     .option('all_files', {
       alias: 'a',
       type: 'boolean',
-      description: 'Include ALL files in context?',
+      description: '是否在上下文中包含所有文件？',
       default: false,
     })
     .option('show_memory_usage', {
       type: 'boolean',
-      description: 'Show memory usage in status bar',
+      description: '在状态栏中显示内存使用情况',
       default: false,
     })
     .option('yolo', {
       alias: 'y',
       type: 'boolean',
       description:
-        'Automatically accept all actions (aka YOLO mode, see https://www.youtube.com/watch?v=xvFZjo5PgG0 for more details)?',
+        '自动接受所有操作（即 YOLO 模式，更多详情请参见 https://www.youtube.com/watch?v=xvFZjo5PgG0）？',
       default: false,
     })
     .option('telemetry', {
       type: 'boolean',
       description:
-        'Enable telemetry? This flag specifically controls if telemetry is sent. Other --telemetry-* flags set specific values but do not enable telemetry on their own.',
+        '启用遥测？此标志专门控制是否发送遥测数据。其他 --telemetry-* 标志设置特定值，但本身不启用遥测。',
     })
     .option('telemetry-target', {
       type: 'string',
       choices: ['local', 'gcp'],
       description:
-        'Set the telemetry target (local or gcp). Overrides settings files.',
+        '设置遥测目标（local 或 gcp）。覆盖设置文件。',
     })
     .option('telemetry-otlp-endpoint', {
       type: 'string',
       description:
-        'Set the OTLP endpoint for telemetry. Overrides environment variables and settings files.',
+        '设置遥测的 OTLP 端点。覆盖环境变量和设置文件。',
     })
     .option('telemetry-log-prompts', {
       type: 'boolean',
       description:
-        'Enable or disable logging of user prompts for telemetry. Overrides settings files.',
+        '启用或禁用遥测中用户提示词的日志记录。覆盖设置文件。',
     })
     .option('checkpointing', {
       alias: 'c',
       type: 'boolean',
-      description: 'Enables checkpointing of file edits',
+      description: '启用文件编辑的检查点功能',
       default: false,
     })
     .version(await getCliVersion()) // This will enable the --version flag based on package.json

@@ -1,6 +1,6 @@
 {
   "name": "gemini-cli-cn",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "中文版Gemini CLI",
   "type": "module",
   "main": "dist/index.js",
