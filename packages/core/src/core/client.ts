@@ -40,8 +40,33 @@ import { ProxyAgent, setGlobalDispatcher } from 'undici';
 import { DEFAULT_GEMINI_FLASH_MODEL } from '../config/models.js';
 import { AuthType } from './contentGenerator.js';
 
-function isThinkingSupported(model: string) {
-  if (model.startsWith('gemini-2.5')) return true;
+/**
+ * 清理包含markdown格式的JSON文本，提取纯JSON内容
+ */
+function cleanJsonText(text: string): string {
+  // 移除开头和结尾的空白字符
+  let cleanText = text.trim();
+  
+  // 检查是否包含markdown代码块格式
+  if (cleanText.startsWith('```json')) {
+    // 移除```json开头
+    cleanText = cleanText.replace(/^```json\s*/i, '');
+  } else if (cleanText.startsWith('```')) {
+    // 移除```开头（可能没有指定语言）
+    cleanText = cleanText.replace(/^```\s*/, '');
+  }
+  
+  // 移除结尾的```
+  if (cleanText.endsWith('```')) {
+    cleanText = cleanText.replace(/\s*```$/, '');
+  }
+  
+  // 再次移除首尾空白字符
+  return cleanText.trim();
+}
+
+function isThinkingSupported(model: string, authType: string | undefined) {
+  if (model.startsWith('gemini-2.5') && (authType === AuthType.LOGIN_WITH_GOOGLE_PERSONAL || authType === AuthType.USE_GEMINI || authType === AuthType.USE_VERTEX_AI)) return true;
   return false;
 }
 
@@ -185,7 +210,7 @@ export class GeminiClient {
     try {
       const userMemory = this.config.getUserMemory();
       const systemInstruction = getCoreSystemPrompt(userMemory);
-      const generateContentConfigWithThinking = isThinkingSupported(this.model)
+      const generateContentConfigWithThinking = isThinkingSupported(this.model, this.config.getContentGeneratorConfig()?.authType)
         ? {
             ...this.generateContentConfig,
             thinkingConfig: {
@@ -296,7 +321,7 @@ export class GeminiClient {
         throw error;
       }
       try {
-        return JSON.parse(text);
+        return JSON.parse(cleanJsonText(text));
       } catch (parseError) {
         await reportError(
           parseError,

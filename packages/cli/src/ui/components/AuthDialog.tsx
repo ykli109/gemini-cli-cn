@@ -36,6 +36,7 @@ export function AuthDialog({
     { label: 'Gemini API 密钥', value: AuthType.USE_GEMINI },
     { label: 'Vertex AI', value: AuthType.USE_VERTEX_AI },
     { label: '方舟 API 密钥', value: AuthType.USE_ARK },
+    { label: 'GPT OpenAPI 密钥', value: AuthType.USE_GPT_OPENAPI },
   ];
 
   let initialAuthIndex = items.findIndex(

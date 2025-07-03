@@ -35,6 +35,8 @@ import {
   ApiResponseEvent,
 } from '../telemetry/types.js';
 import { DEFAULT_GEMINI_FLASH_MODEL } from '../config/models.js';
+import path from 'path';
+import fs from 'node:fs';
 
 /**
  * Returns true if the response is valid, false otherwise.
@@ -505,6 +507,26 @@ export class GeminiChat {
         fullText,
       );
     }
+    // 将outputContent写入log文件夹中
+    if (process.env.ENABLE_API_LOG) {
+      try {
+        const logDir = path.join(process.cwd(), 'log');
+        if (!fs.existsSync(logDir)) {
+          fs.mkdirSync(logDir, { recursive: true });
+        }
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const logFileName = `gemini_output_content_${timestamp}.json`;
+        const logFilePath = path.join(logDir, logFileName);
+        fs.writeFileSync(
+          logFilePath,
+          JSON.stringify(outputContent, null, 2),
+          'utf8'
+        );
+      } catch (err) {
+        // 日志写入失败不影响主流程
+        console.warn('写入outputContent日志失败:', err);
+      }
+    }
     this.recordHistory(inputContent, outputContent);
   }
 
@@ -618,5 +640,9 @@ export class GeminiChat {
       typeof content.parts[0].thought === 'boolean' &&
       content.parts[0].thought === true
     );
+  }
+
+  getConfig(): Config {
+    return this.config;
   }
 }

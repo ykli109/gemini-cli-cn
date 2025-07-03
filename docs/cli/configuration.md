@@ -249,6 +249,18 @@ CLI 自动从 `.env` 文件加载环境变量。加载顺序为：
   - 使用方舟认证时必需，因为方舟不支持默认模型。
   - 示例：`export ARK_MODEL="ep-20250627193526-wzbxz"`
   - 可以通过命令行参数 `--model` 覆盖此设置
+- **`GPT_OPENAPI_API_KEY`**：
+  - 您的GPT OpenAPI兼容服务的API密钥。
+  - 使用GPT OpenAPI模型时必需。
+  - 在您的shell配置文件中设置（例如，`~/.bashrc`、`~/.zshrc`）或`.env`文件中。
+  - 示例：`export GPT_OPENAPI_API_KEY="YOUR_GPT_OPENAPI_API_KEY"`
+  - 适用于所有OpenAPI兼容的GPT服务提供商
+- **`GPT_OPENAPI_MODEL`**：
+  - 指定要使用的GPT OpenAPI模型名称。
+  - 可选，默认为 `gcp-claude4-sonnet`。
+  - 示例：`export GPT_OPENAPI_MODEL="gcp-claude4-sonnet"`
+  - 支持所有OpenAPI兼容的模型
+  - 可以通过命令行参数 `--model` 覆盖此设置
 - **`CUSTOM_BASE_URL`**：
   - 自定义 API 端点地址。
   - 用于方舟模型或其他自定义模型提供商。

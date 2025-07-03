@@ -4,19 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-  GenerateContentParameters,
-  GenerateContentResponse,
-  CountTokensParameters,
-  CountTokensResponse,
-  EmbedContentParameters,
-  EmbedContentResponse,
-  GoogleGenAI,
-} from '@google/genai';
+import { GoogleGenAI } from '@google/genai';
 import { createCodeAssistContentGenerator } from '../code_assist/codeAssist.js';
 import { DEFAULT_GEMINI_MODEL } from '../config/models.js';
 import { getEffectiveModel } from './modelCheck.js';
-import { ContentGenerator, ArkContentGenerator, ArkModelConfig } from '../generators/index.js';
+import { ContentGenerator, ArkContentGenerator, ArkModelConfig, GPTOpenApitContentGenerator, GPTOpenApitModelConfig } from '../generators/index.js';
 
 // 重新导出 ContentGenerator 接口以保持向后兼容性
 export { ContentGenerator };
@@ -26,6 +18,7 @@ export enum AuthType {
   USE_GEMINI = 'gemini-api-key',
   USE_VERTEX_AI = 'vertex-ai',
   USE_ARK = 'ark', // 方舟的模型可以用
+  USE_GPT_OPENAPI = 'gpt-openapi', // GPT OpenAPI兼容的模型可以用
 }
 
 export type ContentGeneratorConfig = {
@@ -49,6 +42,8 @@ export async function createContentGeneratorConfig(
   const googleCloudLocation = process.env.GOOGLE_CLOUD_LOCATION;
   const arkApiKey = process.env.ARK_API_KEY;
   const arkModel = process.env.ARK_MODEL;
+  const gptOpenApiKey = process.env.GPT_OPENAPI_API_KEY;
+  const gptOpenApiModel = process.env.GPT_OPENAPI_MODEL;
   const customBaseUrl = process.env.CUSTOM_BASE_URL;
 
 
@@ -61,6 +56,9 @@ export async function createContentGeneratorConfig(
     if (!effectiveModel.startsWith('ep-')) {
       effectiveModel = '';
     }
+  } else if (authType === AuthType.USE_GPT_OPENAPI) {
+    // GPT OpenAPI模型优先使用传入的model参数，然后是环境变量GPT_OPENAPI_MODEL
+    effectiveModel = model || gptOpenApiModel || 'gcp-claude4-sonnet';
   } else {
     // 其他认证类型使用原有逻辑
     effectiveModel = config?.getModel?.() || model || DEFAULT_GEMINI_MODEL;
@@ -126,6 +124,21 @@ export async function createContentGeneratorConfig(
     return contentGeneratorConfig;
   }
 
+  if (authType === AuthType.USE_GPT_OPENAPI && gptOpenApiKey) {
+    contentGeneratorConfig.apiKey = gptOpenApiKey;
+    contentGeneratorConfig.baseUrl = customBaseUrl;
+    
+    // GPT OpenAPI模型名称
+    let gptOpenApiModelName = effectiveModel;
+    if (!gptOpenApiModelName) {
+      // 尝试从GPT_OPENAPI_MODEL环境变量获取
+      gptOpenApiModelName = gptOpenApiModel || 'gcp-claude4-sonnet';
+    }
+    
+    contentGeneratorConfig.model = gptOpenApiModelName;
+    return contentGeneratorConfig;
+  }
+
   return contentGeneratorConfig;
 }
 
@@ -164,6 +177,15 @@ export async function createContentGenerator(
       baseUrl: config.baseUrl || 'https://ark-cn-beijing.bytedance.net/api/v3',
     };
     return new ArkContentGenerator(arkConfig);
+  }
+
+  if (config.authType === AuthType.USE_GPT_OPENAPI) {
+    // 确保 baseUrl 有值，如果没有则使用默认值
+    const gptOpenApiConfig: GPTOpenApitModelConfig = {
+      ...config,
+      baseUrl: config.baseUrl || 'https://gpt-i18n.byteintl.net/gpt/openapi/online/v2',
+    };
+    return new GPTOpenApitContentGenerator(gptOpenApiConfig);
   }
 
   throw new Error(

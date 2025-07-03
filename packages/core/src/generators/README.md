@@ -9,7 +9,8 @@ generators/
 ├── README.md          # 本文档
 ├── index.ts          # 导出所有适配器
 ├── base.ts           # 基础接口和抽象类
-└── ark.ts            # 方舟模型适配器
+├── ark.ts            # 方舟模型适配器
+└── gpt_openapi.ts    # GPT OpenAPI模型适配器
 ```
 
 ## 核心组件
@@ -36,12 +37,12 @@ generators/
 
 ### 步骤1：创建适配器文件
 
-创建新的适配器文件，命名为你的模型名称，例如 `openai.ts`。可以参考 `ark.ts` 的实现结构。
+创建新的适配器文件，命名为你的模型名称，例如 `your_model.ts`。可以参考 `ark.ts` 或 `gpt_openapi.ts` 的实现结构。
 
 ### 步骤2：定义配置接口
 
 ```typescript
-export interface OpenAIModelConfig extends BaseModelConfig {
+export interface YourModelConfig extends BaseModelConfig {
   organizationId?: string;
   projectId?: string;
   // 添加模型特有的配置
@@ -51,10 +52,10 @@ export interface OpenAIModelConfig extends BaseModelConfig {
 ### 步骤3：实现适配器类
 
 ```typescript
-export class OpenAIContentGenerator extends BaseContentGenerator {
-  constructor(config: OpenAIModelConfig) {
+export class YourModelContentGenerator extends BaseContentGenerator {
+  constructor(config: YourModelConfig) {
     super(config);
-    this.validateOpenAIConfig();
+    this.validateYourModelConfig();
   }
 
   // 实现所有抽象方法
@@ -73,7 +74,7 @@ export class OpenAIContentGenerator extends BaseContentGenerator {
 在 `index.ts` 中添加新的导出：
 
 ```typescript
-export { OpenAIContentGenerator, OpenAIModelConfig } from './openai.js';
+export { YourModelContentGenerator, YourModelConfig } from './your_model.js';
 ```
 
 ### 步骤5：更新主配置
@@ -84,20 +85,23 @@ export { OpenAIContentGenerator, OpenAIModelConfig } from './openai.js';
 
 ```typescript
 export enum AuthType {
-  // ... 现有类型
-  USE_OPENAI = 'openai',
+  LOGIN_WITH_GOOGLE_PERSONAL = 'oauth-personal',
+  USE_GEMINI = 'gemini-api-key',
+  USE_VERTEX_AI = 'vertex-ai',
+  USE_ARK = 'ark',
+  USE_GPT_OPENAPI = 'gpt-openapi',
 }
 ```
 
 2. 在 `createContentGenerator` 函数中添加处理逻辑：
 
 ```typescript
-if (config.authType === AuthType.USE_OPENAI) {
-  const openaiConfig: OpenAIModelConfig = {
+if (config.authType === AuthType.USE_GPT_OPENAPI) {
+  const gptOpenApiConfig: OpenAIModelConfig = {
     ...config,
     baseUrl: config.baseUrl || 'https://api.openai.com/v1',
   };
-  return new OpenAIContentGenerator(openaiConfig);
+  return new OpenAIContentGenerator(gptOpenApiConfig);
 }
 ```
 
@@ -109,6 +113,15 @@ if (config.authType === AuthType.USE_OPENAI) {
 - **认证类型**: `USE_ARK`
 - **环境变量**: `ARK_API_KEY`, `ARK_MODEL`
 - **默认BaseURL**: `https://ark-cn-beijing.bytedance.net/api/v3`
+
+### 2. GPT OpenAPI模型 (GPT OpenAPI)
+
+- **文件**: `gpt_openapi.ts`
+- **认证类型**: `USE_GPT_OPENAPI`
+- **环境变量**: `GPT_OPENAPI_API_KEY`, `GPT_OPENAPI_MODEL`
+- **默认BaseURL**: `https://api.openai.com/v1`
+- **默认模型**: `gcp-claude4-sonnet`
+- **支持的模型**: 所有OpenAPI兼容的GPT模型
 
 ## 设计原则
 

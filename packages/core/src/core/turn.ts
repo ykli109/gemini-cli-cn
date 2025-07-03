@@ -160,25 +160,85 @@ export class Turn {
   ): AsyncGenerator<ServerGeminiStreamEvent> {
     const startTime = Date.now();
     try {
-      const responseStream = await this.chat.sendMessageStream({
-        message: req,
-        config: {
-          abortSignal: signal,
-        },
-      });
+      // 检查是否启用流式响应
+      const streamEnabled = this.chat.getConfig().getStreamEnabled();
+      
+      if (streamEnabled) {
+        // 使用流式响应
+        const responseStream = await this.chat.sendMessageStream({
+          message: req,
+          config: {
+            abortSignal: signal,
+          },
+        });
 
-      for await (const resp of responseStream) {
+        for await (const resp of responseStream) {
+          if (signal?.aborted) {
+            yield { type: GeminiEventType.UserCancelled };
+            // Do not add resp to debugResponses if aborted before processing
+            return;
+          }
+          this.debugResponses.push(resp);
+
+          const thoughtPart = resp.candidates?.[0]?.content?.parts?.[0];
+          if (thoughtPart?.thought) {
+            // Thought always has a bold "subject" part enclosed in double asterisks
+            // (e.g., **Subject**). The rest of the string is considered the description.
+            const rawText = thoughtPart.text ?? '';
+            const subjectStringMatches = rawText.match(/\*\*(.*?)\*\*/s);
+            const subject = subjectStringMatches
+              ? subjectStringMatches[1].trim()
+              : '';
+            const description = rawText.replace(/\*\*(.*?)\*\*/s, '').trim();
+            const thought: ThoughtSummary = {
+              subject,
+              description,
+            };
+
+            yield {
+              type: GeminiEventType.Thought,
+              value: thought,
+            };
+            continue;
+          }
+
+          const text = getResponseText(resp);
+          if (text) {
+            yield { type: GeminiEventType.Content, value: text };
+          }
+
+          // Handle function calls (requesting tool execution)
+          const functionCalls = resp.functionCalls ?? [];
+          for (const fnCall of functionCalls) {
+            const event = this.handlePendingFunctionCall(fnCall);
+            if (event) {
+              yield event;
+            }
+          }
+
+          if (resp.usageMetadata) {
+            this.lastUsageMetadata =
+              resp.usageMetadata as GenerateContentResponseUsageMetadata;
+          }
+        }
+      } else {
+        // 使用非流式响应
+        const response = await this.chat.sendMessage({
+          message: req,
+          config: {
+            abortSignal: signal,
+          },
+        });
+
         if (signal?.aborted) {
           yield { type: GeminiEventType.UserCancelled };
-          // Do not add resp to debugResponses if aborted before processing
           return;
         }
-        this.debugResponses.push(resp);
 
-        const thoughtPart = resp.candidates?.[0]?.content?.parts?.[0];
+        this.debugResponses.push(response);
+
+        const thoughtPart = response.candidates?.[0]?.content?.parts?.[0];
         if (thoughtPart?.thought) {
-          // Thought always has a bold "subject" part enclosed in double asterisks
-          // (e.g., **Subject**). The rest of the string is considered the description.
           const rawText = thoughtPart.text ?? '';
           const subjectStringMatches = rawText.match(/\*\*(.*?)\*\*/s);
           const subject = subjectStringMatches
@@ -194,16 +254,15 @@ export class Turn {
             type: GeminiEventType.Thought,
             value: thought,
           };
-          continue;
         }
 
-        const text = getResponseText(resp);
+        const text = getResponseText(response);
         if (text) {
           yield { type: GeminiEventType.Content, value: text };
         }
 
         // Handle function calls (requesting tool execution)
-        const functionCalls = resp.functionCalls ?? [];
+        const functionCalls = response.functionCalls ?? [];
         for (const fnCall of functionCalls) {
           const event = this.handlePendingFunctionCall(fnCall);
           if (event) {
@@ -211,9 +270,9 @@ export class Turn {
           }
         }
 
-        if (resp.usageMetadata) {
+        if (response.usageMetadata) {
           this.lastUsageMetadata =
-            resp.usageMetadata as GenerateContentResponseUsageMetadata;
+            response.usageMetadata as GenerateContentResponseUsageMetadata;
         }
       }
 

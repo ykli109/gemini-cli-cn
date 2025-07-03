@@ -53,6 +53,7 @@ interface CliArgs {
   telemetryTarget: string | undefined;
   telemetryOtlpEndpoint: string | undefined;
   telemetryLogPrompts: boolean | undefined;
+  stream: boolean | undefined;
 }
 
 async function parseArguments(): Promise<CliArgs> {
@@ -61,7 +62,7 @@ async function parseArguments(): Promise<CliArgs> {
       alias: 'm',
       type: 'string',
       description: `模型`,
-      default: process.env.GEMINI_MODEL || DEFAULT_GEMINI_MODEL,
+      default: "",
     })
     .option('prompt', {
       alias: 'p',
@@ -127,6 +128,11 @@ async function parseArguments(): Promise<CliArgs> {
       type: 'boolean',
       description: '启用文件编辑的检查点功能',
       default: false,
+    })
+    .option('stream', {
+      type: 'boolean',
+      description: '启用流式响应',
+      default: true,
     })
     .version(await getCliVersion()) // This will enable the --version flag based on package.json
     .alias('v', 'version')
@@ -245,6 +251,7 @@ export async function loadCliConfig(
     bugCommand: settings.bugCommand,
     model: argv.model!,
     extensionContextFilePaths,
+    stream: argv.stream ?? true,
   });
 }
 
