@@ -53,7 +53,12 @@ export function AuthDialog({
       setErrorMessage(error);
     } else {
       setErrorMessage(null);
-      onSelect(authMethod, SettingScope.User);
+      // 如果workspace设置中已经有selectedAuthType，就更新workspace设置
+      // 否则更新user设置
+      const targetScope = settings.workspace.settings.selectedAuthType !== undefined 
+        ? SettingScope.Workspace 
+        : SettingScope.User;
+      onSelect(authMethod, targetScope);
     }
   };
 

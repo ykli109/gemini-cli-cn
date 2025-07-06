@@ -168,6 +168,7 @@ export class Config {
   private modelSwitchedDuringSession: boolean = false;
   flashFallbackHandler?: FlashFallbackHandler;
   private readonly stream: boolean;
+  private settedModelMap: Map<string, string> = new Map();
 
   constructor(params: ConfigParameters) {
     this.sessionId = params.sessionId;
@@ -234,10 +235,13 @@ export class Config {
     const _isAuthMethodSwitch =
       previousAuthType && previousAuthType !== authMethod;
 
-    // Always use the original default model when switching auth methods
-    // This ensures users don't stay on Flash after switching between auth types
-    // and allows API key users to get proper fallback behavior from getEffectiveModel
-    const modelToUse = this.model; // Use the original default model
+    let modelToUse: string | undefined;
+    if (_isAuthMethodSwitch) {
+      modelToUse = this.settedModelMap.get(authMethod) || undefined;
+    } else {
+      modelToUse = this.model;
+      this.settedModelMap.set(authMethod, this.model);
+    }
 
     // Temporarily clear contentGeneratorConfig to prevent getModel() from returning
     // the previous session's model (which might be Flash)

@@ -247,7 +247,6 @@ export class GeminiClient {
     if (!turns) {
       return new Turn(this.getChat());
     }
-
     const compressed = await this.tryCompressChat();
     if (compressed) {
       yield { type: GeminiEventType.ChatCompressed, value: compressed };
@@ -462,7 +461,7 @@ export class GeminiClient {
 
     const { totalTokens: originalTokenCount } =
       await this.getContentGenerator().countTokens({
-        model: this.model,
+        model: this.config.getModel(),
         contents: history,
       });
 

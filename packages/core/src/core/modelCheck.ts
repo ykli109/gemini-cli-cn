@@ -21,7 +21,7 @@ export async function getEffectiveModel(
   apiKey: string,
   currentConfiguredModel: string,
 ): Promise<string> {
-  if (currentConfiguredModel !== DEFAULT_GEMINI_MODEL) {
+  if (currentConfiguredModel && currentConfiguredModel !== DEFAULT_GEMINI_MODEL) {
     // Only check if the user is trying to use the specific pro model we want to fallback from.
     return currentConfiguredModel;
   }
