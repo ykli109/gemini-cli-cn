@@ -8,7 +8,7 @@ import React from 'react';
 import { Box, Text } from 'ink';
 import Gradient from 'ink-gradient';
 import { Colors } from '../colors.js';
-import { shortAsciiLogo, longAsciiLogo } from './AsciiArt.js';
+import { shortAsciiLogo, longAsciiLogo, shortGeniusAiLogo } from './AsciiArt.js';
 import { getAsciiArtWidth } from '../utils/textUtils.js';
 
 interface HeaderProps {
@@ -21,16 +21,17 @@ export const Header: React.FC<HeaderProps> = ({
   terminalWidth,
 }) => {
   let displayTitle;
-  const widthOfLongLogo = getAsciiArtWidth(longAsciiLogo);
+  const widthOfLongLogo = getAsciiArtWidth(shortGeniusAiLogo);
 
   if (customAsciiArt) {
     displayTitle = customAsciiArt;
   } else {
-    displayTitle =
-      terminalWidth >= widthOfLongLogo ? longAsciiLogo : shortAsciiLogo;
+    // displayTitle =
+    //   terminalWidth >= widthOfLongLogo ? longAsciiLogo : shortAsciiLogo;
+    displayTitle = shortGeniusAiLogo;
   }
 
-  const artWidth = getAsciiArtWidth(displayTitle);
+  const artWidth = getAsciiArtWidth(shortGeniusAiLogo);
 
   return (
     <Box

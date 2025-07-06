@@ -71,7 +71,7 @@ steps:
 
   # Pre-Step 9: authenticate to our intermediate npm registry
   - name: 'us-west1-docker.pkg.dev/gemini-code-dev/gemini-code-containers/gemini-code-builder'
-    id: 'Setup @google/gemini-cli-core auth token for publishing'
+    id: 'Setup @genius-ai/gemini-cli-core auth token for publishing'
     entrypoint: 'bash'
     args:
       - -c
@@ -79,17 +79,17 @@ steps:
         echo "//wombat-dressing-room.appspot.com/:_authToken=$$CORE_PACKAGE_PUBLISH_TOKEN" > $$HOME/.npmrc
     secretEnv: ['CORE_PACKAGE_PUBLISH_TOKEN']
 
-  # Step 9: Publish @google/gemini-cli-core to NPM
+  # Step 9: Publish @genius-ai/gemini-cli-core to NPM
   - name: 'us-west1-docker.pkg.dev/gemini-code-dev/gemini-code-containers/gemini-code-builder'
-    id: 'Publish @google/gemini-cli-core package'
+    id: 'Publish @genius-ai/gemini-cli-core package'
     entrypoint: 'bash'
     args:
       - -c
       - |
         if [ "$_OFFICIAL_RELEASE" = "true" ]; then
-          npm publish --workspace=@google/gemini-cli-core --tag=latest
+          npm publish --workspace=@genius-ai/gemini-cli-core --tag=latest
         else
-          npm publish --workspace=@google/gemini-cli-core --tag=rc
+          npm publish --workspace=@genius-ai/gemini-cli-core --tag=rc
         fi
     env:
       - 'GEMINI_SANDBOX=$_CONTAINER_TOOL'

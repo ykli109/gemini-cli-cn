@@ -33,7 +33,7 @@ import {
   sessionId,
   logUserPrompt,
   AuthType,
-} from '@google/gemini-cli-core';
+} from '@genius-ai/gemini-cli-core';
 import { validateAuthMethod } from './config/auth.js';
 import { setMaxSizedBoxDebugging } from './ui/components/shared/MaxSizedBox.js';
 

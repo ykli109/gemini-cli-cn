@@ -33,7 +33,7 @@
 
 项目采用monorepo结构，分为两个主要包：
 
-1.  **`@google/gemini-cli-core`** - 核心逻辑包
+1.  **`@genius-ai/gemini-cli-core`** - 核心逻辑包
 
     - AI模型交互（Gemini API集成）
     - 工具注册和执行系统

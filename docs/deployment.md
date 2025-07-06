@@ -88,7 +88,7 @@ npx https://github.com/google-gemini/gemini-cli
 
 Gemini CLI 项目是一个 monorepo，它将两个核心包发布到 NPM 注册表：
 
-- `@google/gemini-cli-core`：后端，处理逻辑和工具执行。
+- `@genius-ai/gemini-cli-core`：后端，处理逻辑和工具执行。
 - `@google/gemini-cli`：面向用户的前端。
 
 这些包在执行标准安装和从源代码运行 Gemini CLI 时使用。
@@ -97,7 +97,7 @@ Gemini CLI 项目是一个 monorepo，它将两个核心包发布到 NPM 注册�
 
 根据分发渠道，使用两种不同的构建流程：
 
-- **NPM 发布：** 对于发布到 NPM 注册表，`@google/gemini-cli-core` 和 `@google/gemini-cli` 中的 TypeScript 源代码使用 TypeScript 编译器（`tsc`）转译为标准 JavaScript。生成的 `dist/` 目录是 NPM 包中发布的内容。这是 TypeScript 库的标准方法。
+- **NPM 发布：** 对于发布到 NPM 注册表，`@genius-ai/gemini-cli-core` 和 `@genius-ai/gemini-cli` 中的 TypeScript 源代码使用 TypeScript 编译器（`tsc`）转译为标准 JavaScript。生成的 `dist/` 目录是 NPM 包中发布的内容。这是 TypeScript 库的标准方法。
 
 - **GitHub `npx` 执行：** 当直接从 GitHub 运行最新版本的 Gemini CLI 时，由 `package.json` 中的 `prepare` 脚本触发不同的流程。此脚本使用 `esbuild` 将整个应用程序及其依赖项打包到单个自包含的 JavaScript 文件中。这个包是在用户机器上即时创建的，不会检入仓库。
 

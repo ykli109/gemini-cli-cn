@@ -9,7 +9,7 @@ import { Box, Text, useInput } from 'ink';
 import { Colors } from '../colors.js';
 import { RadioButtonSelect } from './shared/RadioButtonSelect.js';
 import { LoadedSettings, SettingScope } from '../../config/settings.js';
-import { AuthType } from '@google/gemini-cli-core';
+import { AuthType } from '@genius-ai/gemini-cli-core';
 import { validateAuthMethod } from '../../config/auth.js';
 
 interface AuthDialogProps {
@@ -97,7 +97,7 @@ export function AuthDialog({
       <Box marginTop={1}>
         <Text color={Colors.Gray}>（使用 Enter 选择）</Text>
       </Box>
-      <Box marginTop={1}>
+      {/* <Box marginTop={1}>
         <Text>Gemini CLI 服务条款和隐私声明</Text>
       </Box>
       <Box marginTop={1}>
@@ -106,7 +106,7 @@ export function AuthDialog({
             'https://github.com/google-gemini/gemini-cli/blob/main/docs/tos-privacy.md'
           }
         </Text>
-      </Box>
+      </Box> */}
     </Box>
   );
 }

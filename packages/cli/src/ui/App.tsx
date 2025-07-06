@@ -54,7 +54,7 @@ import {
   ApprovalMode,
   isEditorAvailable,
   EditorType,
-} from '@google/gemini-cli-core';
+} from '@genius-ai/gemini-cli-core';
 import { validateAuthMethod } from '../config/auth.js';
 import { useLogger } from './hooks/useLogger.js';
 import { StreamingContext } from './contexts/StreamingContext.js';
