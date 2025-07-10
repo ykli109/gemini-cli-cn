@@ -1,6 +1,6 @@
 {
   "name": "@genius-ai/gemini-cli-cn",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "中文版Gemini CLI",
   "type": "module",
   "main": "dist/index.js",
@@ -32,7 +32,7 @@
     "sandboxImageUri": "us-docker.pkg.dev/gemini-code-dev/gemini-cli/sandbox:0.1.1"
   },
   "dependencies": {
-    "@genius-ai/gemini-cli-core": "0.1.5",
+    "@genius-ai/gemini-cli-core": "0.1.6",
     "@types/update-notifier": "^6.0.8",
     "command-exists": "^1.2.9",
     "diff": "^7.0.0",

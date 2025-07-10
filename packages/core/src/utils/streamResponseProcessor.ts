@@ -176,10 +176,8 @@ export async function* processStreamResponse(
                 if (accumulatedToolCalls.size > 0) {
                   const parts = [];
 
-                  // Add accumulated content if any
-                  if (accumulatedContent) {
-                    parts.push({ text: accumulatedContent });
-                  }
+                  // 注意：不再添加累积的文本内容，因为它们已经通过流式chunks发送了
+                  // 这避免了重复显示问题
 
                   // Add completed tool calls
                   const functionCallsArray = Array.from(
@@ -251,4 +249,4 @@ export async function* processStreamResponse(
   } finally {
     reader.releaseLock();
   }
-} 
+}

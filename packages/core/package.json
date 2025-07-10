@@ -1,6 +1,6 @@
 {
   "name": "@genius-ai/gemini-cli-core",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Gemini CLI Server",
   "type": "module",
   "main": "dist/index.js",
