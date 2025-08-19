@@ -1,6 +1,6 @@
 {
   "name": "@genius-ai/gemini-cli-cn",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "中文版Gemini CLI",
   "type": "module",
   "main": "dist/index.js",

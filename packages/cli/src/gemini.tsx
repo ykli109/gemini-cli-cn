@@ -7,7 +7,7 @@
 import React from 'react';
 import { render } from 'ink';
 import { AppWrapper } from './ui/App.js';
-import { loadCliConfig } from './config/config.js';
+import { loadCliConfig, parseArguments } from './config/config.js';
 import { readStdin } from './utils/readStdin.js';
 import { basename } from 'node:path';
 import v8 from 'node:v8';
@@ -108,6 +108,16 @@ export async function main() {
       SettingScope.User,
       'selectedAuthType',
       AuthType.USE_GEMINI,
+    );
+  }
+
+  // Override auth type if specified via command line
+  const argv = await parseArguments();
+  if (argv.auth) {
+    settings.setValue(
+      SettingScope.User,
+      'selectedAuthType',
+      argv.auth,
     );
   }
 

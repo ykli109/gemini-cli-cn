@@ -14,7 +14,6 @@ import {
   getCurrentGeminiMdFilename,
   ApprovalMode,
   GEMINI_CONFIG_DIR as GEMINI_DIR,
-  DEFAULT_GEMINI_MODEL,
   DEFAULT_GEMINI_EMBEDDING_MODEL,
   FileDiscoveryService,
   TelemetryTarget,
@@ -54,9 +53,10 @@ interface CliArgs {
   telemetryOtlpEndpoint: string | undefined;
   telemetryLogPrompts: boolean | undefined;
   stream: boolean | undefined;
+  auth: string | undefined;
 }
 
-async function parseArguments(): Promise<CliArgs> {
+export async function parseArguments(): Promise<CliArgs> {
   const argv = await yargs(hideBin(process.argv))
     .option('model', {
       alias: 'm',
@@ -133,6 +133,11 @@ async function parseArguments(): Promise<CliArgs> {
       type: 'boolean',
       description: '启用流式响应',
       default: true,
+    })
+    .option('auth', {
+      type: 'string',
+      description: '指定认证方式 (oauth-personal, gemini-api-key, vertex-ai, ark, gpt-openapi)',
+      choices: ['oauth-personal', 'gemini-api-key', 'vertex-ai', 'ark', 'gpt-openapi'],
     })
     .version(await getCliVersion()) // This will enable the --version flag based on package.json
     .alias('v', 'version')
